@@ -78,7 +78,7 @@ class BranchController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $branch = branch::where('id',$request->id)->first();
+        $branch = Branch::where('id',$request->id)->first();
          try{
             $branch->update([
                 'name_en' => $request->name_en,

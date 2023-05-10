@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="form-group">
                                    <label>المبلغ</label>
-                                   <input type="number" name="amount" min="0" class="form-control" value="{{ old('amount', $payment->amount)}}">  
+                                   <input type="number" step="any" name="amount" min="0" class="form-control" value="{{ old('amount', $payment->amount)}}">  
                                     @error('amount')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror

@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('client_reservation_payments', function (Blueprint $table) {
-            $table->id();
+          	$table->id();
 			$table->decimal('amount');
             $table->decimal('remaining_amount')->nullable();
+            $table->decimal('discount')->nullable();
 			$table->string('notes')->nullable();
 			$table->unsignedBigInteger('branch_id')->nullable();
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade')->onUpdate('cascade');
@@ -28,6 +29,8 @@ return new class extends Migration
             $table->foreign('sub_specialist_id')->references('id')->on('sub_specialists')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('reservation_id')->nullable();
             $table->foreign('reservation_id')->references('id')->on('reservations')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

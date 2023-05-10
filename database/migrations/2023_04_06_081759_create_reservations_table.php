@@ -26,13 +26,15 @@ class CreateReservationsTable extends Migration {
 			$table->enum('status', array('pending', 'completed', 'canceled','absent'));
 			$table->enum('type', array('first_visit', 'sec_visit'));
 			$table->text('notes')->nullable();
-			// $table->unsignedBigInteger('service_id')->nullable();
-            // $table->foreign('service_id')->references('id')->on('services')->onDelete('set null')->onUpdate('set null');
 			$table->unsignedBigInteger('payment_method_id')->nullable();
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('set null')->onUpdate('set null');
 			$table->string('insurance')->nullable();
             $table->decimal('insurance_discount')->nullable()->default(0);
             $table->decimal('insurance_percentage')->nullable()->default(0);
+			$table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('reservation_price')->nullable()->default(0);
+            $table->decimal('services_price')->nullable()->default(0);
             $table->decimal('final_price')->nullable()->default(0);
 			$table->string('appointment_notes')->nullable();
 			$table->timestamps();

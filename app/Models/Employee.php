@@ -9,7 +9,7 @@ class Employee extends Model
 
     protected $table = 'employees';
     public $timestamps = true;
-    protected $fillable = ['name', 'phone', 'email', 'password', 'image', 'salary', 'department_id','roles_name'];
+    protected $fillable = ['name', 'phone', 'email', 'password', 'image', 'salary', 'department_id','roles_name','salary'];
 
     public function department()
     {

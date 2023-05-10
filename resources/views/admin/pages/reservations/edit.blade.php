@@ -50,8 +50,8 @@
 
                         @php
                             $branches = App\Models\Branch::pluck('name_ar', 'id');
-                            $services = App\Models\Service::where('branch_id',$reservation->branch_id)->get();
-                            $servicesIds = $reservation->services()->pluck('service_id')->toArray();
+                            // $services = App\Models\Service::where('branch_id',$reservation->branch_id)->get();
+                            // $servicesIds = $reservation->services()->pluck('service_id')->toArray();
                             $pluck = App\Models\PaymentMethod::pluck('name_ar', 'id');
                             $specialists = App\Models\Specialist::all();
 
@@ -60,6 +60,7 @@
                             App\Models\Doctor::whereIn('id',$doctorsIds)->get() :
                             App\Models\Doctor::where('branch_id',$reservation->branch_id)
                             ->where('specialist_id',$reservation->specialist_id)->get() ;
+                            $companies = App\Models\Company::pluck('name','id')
             
 
                         @endphp
@@ -255,7 +256,8 @@
                                     {!!Form::label('name', ' % النسبة المئوية لتحمل التأمين بدون ')!!} 
                                         {!!Form::number('insurance_percentage', null,[
                                             'class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => '% النسبة المئوية لتحمل التأمين بدون '
+                                            'placeholder' => '% النسبة المئوية لتحمل التأمين بدون ',
+                                             'step'=>'any',
                                         ])!!}
                                     </div>      
                                 </div>
@@ -267,7 +269,8 @@
                                     {!!Form::label('name', ' خصم التأمين')!!} 
                                         {!!Form::number('insurance_discount', null,[
                                             'class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => ' خصم التأمين  '
+                                            'placeholder' => ' خصم التأمين  ',
+                                             'step'=>'any',
                                         ])!!}
                                     </div> 
                                 </div>
@@ -280,44 +283,37 @@
 
                             
                                 <div class="row">
+                                   <div class="col-md-4">
+                                        <div class="form-group">
+                                            {!!Form::label('name', 'الشركة التي تم الحجز بواسطتها')!!}
+                                            {!! Form::select('company_id', $companies, null ,
+                                            ['class' => 'form-control  mt-1 mb-3',
+                                            'placeholder' => 'إختار الشركة ',
+                                            ])
+                                            !!}
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>إختار الخدمات الإضافية </label>
-                                        <select style="border-color: gray" class="js-multiple form-control" name="service_ids[]" multiple="multiple">
-                                        <option value="">إختارالخدمات الإضافية   </option>   
-                                            @foreach($services as $service)
-
-                                            @if(in_array($service->id ,$servicesIds))
-                                            <option value="{{$service->id}}" selected>{{$service->name_ar}} </option>
-                                            @else
-                                            <option value="{{$service->id}}" >{{$service->name_ar}} </option>
-                                            @endif
-                                            @endforeach
-                                        </select>
+                                        <div class="form-group">
+                                            {!!Form::label('name', 'ملاحظات')!!} 
+                                            {!!Form::text('notes', null,[
+                                                'class' => 'form-control  mt-1 mb-3',
+                                                'placeholder' => 'ملاحظات'
+                                            ])!!}
+                                        </div>
                                     </div>
 
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        {!!Form::label('name', 'ملاحظات')!!} 
-                                        {!!Form::text('notes', null,[
-                                            'class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'ملاحظات'
-                                        ])!!}
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            {!! Form::label('name','إختار طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
+                                            {!! Form::select('payment_method_id', $pluck, null ,
+                                            ['class' => 'form-control  mt-1 mb-3',
+                                            'placeholder' => 'إختار طريقة الدفع',
+                                            ])
+                                            !!}
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        {!! Form::label('name','إختار طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
-                                        {!! Form::select('payment_method_id', $pluck, null ,
-                                        ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار طريقة الدفع',
-                                        ])
-                                        !!}
-                                    </div>
-                                </div>
                             </div>
 
                             <input type="hidden" name="id" value="{{ $reservation->id }}">

@@ -25,15 +25,9 @@ class UserSeeder extends Seeder
             'department_id' => 7 ,
             'roles_name' => ["superadmin"],
             'branch_id' => 1,
+            'salary' =>1000,
     ]);
 
-            $user->salary()->create([
-            'salariable_type' => 'App\Models\User',
-            'salariable_id' => '1',
-            'branch_id' => 1,
-            'amount' => '1000',
-            'details' => 'راتب'
-        ]);
 
         $role = Role::create(['name' => 'superadmin']);
 

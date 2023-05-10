@@ -37,11 +37,10 @@
 											<tr>
 												<th>#</th>
 												<th>الخدمة</th>
-                                                <th>الصورة</th>
-                                                <th>السعر</th>
                                                 @can('services-show')
                                                 <th>تفاصيل الخدمة</th>
                                                 @endcan
+                                                <th>التخصص </th>
                                                 @can('services-edit')
                                                 <th>تحديث</th>
                                                 @endcan
@@ -55,20 +54,18 @@
                                                 <tr>
                                                     <th scope="row">{{ $loop->iteration }}</th>
                                                     <td>{{ $service->name_ar }}</td>
-                                                    <td>
-                                                        @if($service->image)
-                                                               <img src="{{ url('uploads/services').'/'. $service->image}}" width="50px" alt ="{{ $service->name_ar}}">
-                                                        @else
-                                                            <p>لا يوجد</p>
-                                                        @endif
-                                                    </td>
-
-                                                    <td>{{ $service->price }}</td>
                                                     @can('services-show')
-                                                    <td>
-                                                        <a href="{{route('admin.services.show',$service->id)}}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" title="تفاصيل الخدمة"><i class="fa fa-eye text-white" aria-hidden="true"></i></a>
-                                                    </td>
+                                                        <td>
+                                                            {{ $service->description_ar }}
+                                                        </td>
                                                     @endcan
+
+
+                                                    <td>
+                                                        {{ $service->specialist->name_ar }}
+                                                    </td>
+                                            
+                                     
                                                     @can('services-edit')
                                                     <td>
                                                         <a href="{{route('admin.services.edit',$service->id)}}" class="btn btn-info btn-sm" role="button" aria-pressed="true" title="تحديث الخدمة"><i class="fa fa-edit text-white" aria-hidden="true"></i></a>

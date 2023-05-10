@@ -65,7 +65,7 @@
 												<th>الوظيفة</th>
 												<th>الراتب</th>
                                                 <th>الصورة الشخصية</th>
-                                                 <th>تاريخ الإلتحاق </th>
+                                                 {{-- <th>تاريخ الإلتحاق </th> --}}
 												 @can('dashboard')
 												 	<th>الفرع  </th>
 												 @can('employees-edit')
@@ -87,8 +87,8 @@
                                                     <th scope="row">{{ $loop->iteration }}</th>
                                                     <td>{{ $emp->name }}</td>
                                                     <td>{{ $emp->department->name_ar}}</td>
-													@if( $emp->salary->amount)
-                                                    <td>{{ $emp->salary->amount}}</td>
+													@if( $emp->salary)
+                                                    <td>{{ $emp->salary}}</td>
 													@else
 													<td>0</td>
 													@endif
@@ -101,7 +101,7 @@
                                                         @endif
                                                     </td>
 
-                                                    <td>{{Carbon\Carbon::parse($emp->created_at)->format('d M ,Y')}}</td>
+                                                    {{-- <td>{{Carbon\Carbon::parse($emp->created_at)->format('d M ,Y')}}</td> --}}
 
                                                     @can('dashboard')
 													 <td>{{ $emp->branch->name_ar}}</td>

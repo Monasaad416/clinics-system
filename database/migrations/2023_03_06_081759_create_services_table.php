@@ -15,10 +15,10 @@ class CreateServicesTable extends Migration {
             $table->string('slug');
 			$table->text('description_en')->nullable();
             $table->text('description_ar')->nullable();
-            $table->string('image')->nullable();
-            $table->decimal('price');
-            $table->unsignedBigInteger('branch_id')->nullable();
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade')->onUpdate('cascade');
+            // $table->unsignedBigInteger('branch_id')->nullable();
+            // $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade')->onUpdate('cascade');
+			$table->unsignedBigInteger('specialist_id')->nullable();
+            $table->foreign('specialist_id')->references('id')->on('specialists')->onDelete('cascade')->onUpdate('cascade');
 			$table->timestamps();
 		});
 	}

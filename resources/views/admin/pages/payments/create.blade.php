@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>المبلغ</label>
-                                   <input type="number" name="amount" min="0" class="form-control">
+                                   <input type="number" name="amount" min="0" step="any" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>تفاصيل البند</label>

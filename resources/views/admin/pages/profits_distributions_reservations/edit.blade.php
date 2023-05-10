@@ -7,7 +7,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">إضافة سند قبض من للعميل للحجز {{ $reservation->number }}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ سندات القبض</span>
+                <h4 class="content-title mb-0 my-auto">تعديل سند قبض من للعميل للحجز {{ $payment->reservation->number }}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ سندات القبض</span>
             </div>
         </div>
 
@@ -40,10 +40,12 @@
 
                         @include('inc.errors')
                         {!! Form::model($model,[
-                            'route' => 'admin.client_payment.store',
+                            'route' => 'admin.clients_payments.update',
                             ])
                         !!}
 
+
+        
                     <fieldset class="my-4">
                         <legend>حدد رسوم الكشف</legend>
                         <div class="row">
@@ -66,7 +68,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     {!! Form::label('name','المبلغ المتبقي  ')!!}
-                                    {!! Form::number('remaining_amount', null ,
+                                    {!! Form::number('remaining_amount', $payment->remaining_amount ,
                                     ['class' => 'form-control  mt-1 mb-3',
                                     'placeholder' => 'المبلغ المتبقي   ',
                                     'step' => "any" ,
@@ -115,16 +117,19 @@
                           --}}
 
 
-                                 <input type="hidden" name="reservation_id" value= {{ $reservation->id }}>
+                                 <input type="hidden" name="payment_id" value= {{ $payment->id }}>
                     </fieldset>
 
 
+                    
                     <fieldset>
-                       <div class="row">
+
+                        <div class="row">
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     {!! Form::label('name',' ملاحظات')!!} 
-                                    {!! Form::textarea('notes', null, [
+                                    {!! Form::textarea('notes', $payment->notes, [
                                         'class'      => 'form-control',
                                         'rows'       => 2, 
                                         'name'       => 'txt',
@@ -140,7 +145,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     {!! Form::label('name','إختار طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
-                                    {!! Form::select('payment_method_id', $paymentMethods, null ,
+                                    {!! Form::select('payment_method_id', $paymentMethods, $payment->payment_method_id ,
                                     ['class' => 'form-control  mt-1 mb-3',
                                     'placeholder' => 'إختار طريقة الدفع',
                                     ])

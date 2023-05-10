@@ -9,15 +9,15 @@ class Service extends Model
 
     protected $table = 'services';
     public $timestamps = true;
-    protected $fillable = ['name_en', 'name_ar','description_ar','description_en','image','slug','price','branch_id'];
+    protected $fillable = ['name_en', 'name_ar','description_ar','description_en','slug','specialist_id'];
 
     // public function subServices()
     // {
     //     return $this->hasMany('App\Models\SubService');
     // }
-    public function branch()
+    public function specialist()
     {
-        return $this->belongsTo(App\Models\Branch::class);
+        return $this->belongsTo('App\Models\Specialist');
     }
 
     public function reservations()

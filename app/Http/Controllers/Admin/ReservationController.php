@@ -67,7 +67,7 @@ class ReservationController extends Controller
             $number = "B".$request->branch_id.'#'.str_pad($latesRes->id + 1, 8, "0", STR_PAD_LEFT);
         }
         if(!$client){
-          
+
         try{
 
             DB::beginTransaction();
@@ -83,7 +83,7 @@ class ReservationController extends Controller
                 $file_no = $request->branch_id.'#'.str_pad($latesClient->id + 1, 8, "0", STR_PAD_LEFT);
             }
 
-                
+
                 //add new client
                 $client = Client::create([
                 'name' => $request->name,
@@ -93,7 +93,7 @@ class ReservationController extends Controller
                 'branch_id' => $request->branch_id,
                 ]);
 
-                $insurancePercentage = $request->insurance_percentage;
+                $insurancePercentage = $request->insurance_percentage ? $request->insurance_percentage :0;
                 $doctor = Doctor::where('id',$request->doctor_id)->first();
                 $doctorFees = $doctor->discount_fees > 0 ? $doctor->discount_fees : $doctor->fees;
                 $insuranceDisc = $doctorFees * $insurancePercentage /100 ;
@@ -115,6 +115,7 @@ class ReservationController extends Controller
                 'insurance' => $request->insurance,
                 'insurance_discount' => $insuranceDisc,
                 'insurance_percentage' => $insurancePercentage,
+                'company_id' => $request->company_id,
                 ]);
 
 
@@ -122,67 +123,67 @@ class ReservationController extends Controller
                 $type = $reservation->type;
 
                 //first visit fees
-                if ($type == 'first_visit') {
-                    $doctor = Doctor::where('id',$reservation->doctor_id)->first();
-                    $insuranceDiscount = 0;
-                    $totalServicesPrice = 0;
+                // if ($type == 'first_visit') {
+                //     $doctor = Doctor::where('id',$reservation->doctor_id)->first();
+                //     $insuranceDiscount = 0;
+                //     $totalServicesPrice = 0;
 
 
-                    if($request->has('service_ids') ){
-                        $reservation->services()->sync($request->service_ids);
-                        $servicesIds = [];
+                //     if($request->has('service_ids') ){
+                //         $reservation->services()->sync($request->service_ids);
+                //         $servicesIds = [];
 
-                        foreach($request->service_ids as $serv_id){
-                            $servicesIds[] = $serv_id;
-                            $price = Service::where('id',$serv_id)->first()->price;
-                            $totalServicesPrice += $price;
+                //         foreach($request->service_ids as $serv_id){
+                //             $servicesIds[] = $serv_id;
+                //             $price = Service::where('id',$serv_id)->first()->price;
+                //             $totalServicesPrice += $price;
 
-                        }
-                    }
+                //         }
+                //     }
 
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $insuranceDisc + $servicesDiscount;
-                    }
-
-
-                    if($doctor->discount_fees > 0 ) {
-                        $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
-
-                        $reservation->save();
-                    } else {
-                        $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-                    }
-                } elseif($type == 'sec_visit') {
-                    $doctor = Doctor::where('id',$reservation->doctor_id)->first();
-                    $insuranceDiscount = 0;
-                    $totalServicesPrice = 0;
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $insuranceDisc + $servicesDiscount;
+                //     }
 
 
-                    if($request->has('service_ids') ){
-                        $reservation->services()->sync($request->service_ids);
-                        $servicesIds = [];
+                //     if($doctor->discount_fees > 0 ) {
+                //         $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
 
-                        foreach($request->service_ids as $serv_id){
-                            $servicesIds[] = $serv_id;
-                            $price = Service::where('id',$serv_id)->first()->price;
-                            $totalServicesPrice += $price;
-
-                        }
-                    }
-
-
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount =  $servicesDiscount;
-                    }
+                //         $reservation->save();
+                //     } else {
+                //         $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+                //     }
+                // } elseif($type == 'sec_visit') {
+                //     $doctor = Doctor::where('id',$reservation->doctor_id)->first();
+                //     $insuranceDiscount = 0;
+                //     $totalServicesPrice = 0;
 
 
-                    $reservation->final_price = $totalServicesPrice - $insuranceDiscount;
-                    $reservation->save();
+                //     if($request->has('service_ids') ){
+                //         $reservation->services()->sync($request->service_ids);
+                //         $servicesIds = [];
 
-                }
+                //         foreach($request->service_ids as $serv_id){
+                //             $servicesIds[] = $serv_id;
+                //             $price = Service::where('id',$serv_id)->first()->price;
+                //             $totalServicesPrice += $price;
+
+                //         }
+                //     }
+
+
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount =  $servicesDiscount;
+                //     }
+
+
+                //     $reservation->final_price = $totalServicesPrice - $insuranceDiscount;
+                //     $reservation->save();
+
+                // }
 
 
 
@@ -196,11 +197,11 @@ class ReservationController extends Controller
 
 
         } else{
-               
+
             try{
                 $client = Client::where('phone',$request->phone)->orWhere('email',$request->email)->first();
 
-                $insurancePercentage = $request->insurance_percentage;
+                $insurancePercentage = $request->insurance_percentage ? $request->insurance_percentage : 0;
                 $doctor = Doctor::where('id',$request->doctor_id)->first();
                 $doctorFees = $doctor->discount_fees > 0 ? $doctor->discount_fees : $doctor->fees;
                 $insuranceDisc = $doctorFees * $insurancePercentage /100 ;
@@ -221,72 +222,73 @@ class ReservationController extends Controller
                     'insurance' => $request->insurance,
                     'insurance_discount' => $insuranceDisc,
                     'insurance_percentage' => $insurancePercentage,
+                    'company_id' => $request->company_id,
                 ]);
 
                 $reservation = Reservation::latest()->first();
                 $type = $reservation->type;
 
                 //first visit fees
-                if ($type == 'first_visit') {
-                    $doctor = Doctor::where('id',$reservation->doctor_id)->first();
-                    $insuranceDiscount = 0;
-                    $totalServicesPrice = 0;
+                // if ($type == 'first_visit') {
+                //     $doctor = Doctor::where('id',$reservation->doctor_id)->first();
+                //     $insuranceDiscount = 0;
+                //     $totalServicesPrice = 0;
 
 
-                    if($request->has('service_ids') ){
-                        $reservation->services()->sync($request->service_ids);
-                        $servicesIds = [];
+                //     if($request->has('service_ids') ){
+                //         $reservation->services()->sync($request->service_ids);
+                //         $servicesIds = [];
 
-                        foreach($request->service_ids as $serv_id){
-                            $servicesIds[] = $serv_id;
-                            $price = Service::where('id',$serv_id)->first()->price;
-                            $totalServicesPrice += $price;
+                //         foreach($request->service_ids as $serv_id){
+                //             $servicesIds[] = $serv_id;
+                //             $price = Service::where('id',$serv_id)->first()->price;
+                //             $totalServicesPrice += $price;
 
-                        }
-                    }
+                //         }
+                //     }
 
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $insuranceDisc + $servicesDiscount;
-                    }
-
-
-                    if($doctor->discount_fees > 0 ) {
-                        $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-                    } else {
-                        $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-                    }
-                } elseif($type== 'sec_visit') {
-                    $doctor = Doctor::where('id',$reservation->doctor_id)->first();
-                    $insuranceDiscount = 0;
-                    $totalServicesPrice = 0;
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $insuranceDisc + $servicesDiscount;
+                //     }
 
 
-                    if($request->has('service_ids') ){
-                        $reservation->services()->sync($request->service_ids);
-                        $servicesIds = [];
-
-                        foreach($request->service_ids as $serv_id){
-                            $servicesIds[] = $serv_id;
-                            $price = Service::where('id',$serv_id)->first()->price;
-                            $totalServicesPrice += $price;
-
-                        }
-                    }
-
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $servicesDiscount;
-                    }
+                //     if($doctor->discount_fees > 0 ) {
+                //         $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+                //     } else {
+                //         $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+                //     }
+                // } elseif($type== 'sec_visit') {
+                //     $doctor = Doctor::where('id',$reservation->doctor_id)->first();
+                //     $insuranceDiscount = 0;
+                //     $totalServicesPrice = 0;
 
 
+                //     if($request->has('service_ids') ){
+                //         $reservation->services()->sync($request->service_ids);
+                //         $servicesIds = [];
 
-                        $reservation->final_price = $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
+                //         foreach($request->service_ids as $serv_id){
+                //             $servicesIds[] = $serv_id;
+                //             $price = Service::where('id',$serv_id)->first()->price;
+                //             $totalServicesPrice += $price;
 
-                }
+                //         }
+                //     }
+
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $servicesDiscount;
+                //     }
+
+
+
+                //         $reservation->final_price = $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+
+                // }
 
                 return redirect()->route('admin.reservations.index')->with('success' ,'تم تأكيد الحجز بنجاح.');
             } catch (Exception $e) {
@@ -353,7 +355,7 @@ class ReservationController extends Controller
 
 
 
-                $insurancePercentage = $request->insurance_percentage;
+                $insurancePercentage = $request->insurance_percentage ? $request->insurance_percentage : 0;
                 $doctor = Doctor::where('id',$request->doctor_id)->first();
                 $doctorFees = $doctor->discount_fees > 0 ? $doctor->discount_fees : $doctor->fees;
                 $insuranceDisc = $doctorFees * $insurancePercentage /100 ;
@@ -373,6 +375,7 @@ class ReservationController extends Controller
                 'insurance' => $request->insurance,
                 'insurance_discount' => $insuranceDisc,
                 'insurance_percentage' => $insurancePercentage,
+                'company_id' => $request->company_id,
                 ]);
 
                 $doctor = Doctor::where('id',$reservation->doctor_id)->first();
@@ -380,58 +383,58 @@ class ReservationController extends Controller
                 $totalServicesPrice = 0;
 
 
-                if ($reservation->type=='first_visit'){
+                // if ($reservation->type=='first_visit'){
 
-                    if($request->has('service_ids') ){
-                    $reservation->services()->sync($request->service_ids);
-                    $servicesIds = [];
+                //     if($request->has('service_ids') ){
+                //     $reservation->services()->sync($request->service_ids);
+                //     $servicesIds = [];
 
-                    foreach($request->service_ids as $serv_id){
-                        $servicesIds[] = $serv_id;
-                        $price = Service::where('id',$serv_id)->first()->price;
-                        $totalServicesPrice += $price;
+                //     foreach($request->service_ids as $serv_id){
+                //         $servicesIds[] = $serv_id;
+                //         $price = Service::where('id',$serv_id)->first()->price;
+                //         $totalServicesPrice += $price;
 
-                    }
-                    }
+                //     }
+                //     }
 
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $insuranceDisc + $servicesDiscount;
-                    }
-
-
-                    if($doctor->discount_fees > 0 ) {
-                        $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-                    } else {
-                        $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-                    }
-
-                } elseif($reservation->type == 'sec_visit') {
-                   if($request->has('service_ids') ){
-                    $reservation->services()->sync($request->service_ids);
-                    $servicesIds = [];
-
-                    foreach($request->service_ids as $serv_id){
-                        $servicesIds[] = $serv_id;
-                        $price = Service::where('id',$serv_id)->first()->price;
-                        $totalServicesPrice += $price;
-
-                    }
-                }
-
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $insuranceDisc+$servicesDiscount;
-                    }
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $insuranceDisc + $servicesDiscount;
+                //     }
 
 
+                //     if($doctor->discount_fees > 0 ) {
+                //         $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+                //     } else {
+                //         $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+                //     }
 
-                    $reservation->final_price =  $totalServicesPrice - $insuranceDiscount;
-                    $reservation->save();
+                // } elseif($reservation->type == 'sec_visit') {
+                //    if($request->has('service_ids') ){
+                //     $reservation->services()->sync($request->service_ids);
+                //     $servicesIds = [];
 
-                }
+                //     foreach($request->service_ids as $serv_id){
+                //         $servicesIds[] = $serv_id;
+                //         $price = Service::where('id',$serv_id)->first()->price;
+                //         $totalServicesPrice += $price;
+
+                //     }
+                // }
+
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $insuranceDisc+$servicesDiscount;
+                //     }
+
+
+
+                //     $reservation->final_price =  $totalServicesPrice - $insuranceDiscount;
+                //     $reservation->save();
+
+                // }
 
 
 
@@ -452,7 +455,7 @@ class ReservationController extends Controller
         } else{
             try{
                 $client = Client::where('phone',$reservation->client->phone)->first();
-                $insurancePercentage = $request->insurance_percentage;
+                $insurancePercentage = $request->insurance_percentage ? $request->insurance_percentage :0;
                 $doctor = Doctor::where('id',$request->doctor_id)->first();
                 $doctorFees = $doctor->discount_fees > 0 ? $doctor->discount_fees : $doctor->fees;
                 $insuranceDisc = $doctorFees * $insurancePercentage /100 ;
@@ -473,6 +476,7 @@ class ReservationController extends Controller
                     'insurance' => $request->insurance,
                     'insurance_discount' => $insuranceDisc,
                     'insurance_percentage' => $insurancePercentage,
+                    'company_id' => $request->company_id,
 
                 ]);
 
@@ -482,53 +486,53 @@ class ReservationController extends Controller
                 $totalServicesPrice = 0;
 
 
-                if ($reservation->type=='first_visit'){
-                    if($request->has('service_ids') ){
-                    $servicesIds = [];
-                    foreach($request->service_ids as $id){
-                        $servicesIds[] = $id;
+                // if ($reservation->type=='first_visit'){
+                //     if($request->has('service_ids') ){
+                //     $servicesIds = [];
+                //     foreach($request->service_ids as $id){
+                //         $servicesIds[] = $id;
 
-                        $reservation->services()->sync($servicesIds);
-                        $price = Service::where('id',$id)->first()->price;
-                        $totalServicesPrice += $price;
+                //         $reservation->services()->sync($servicesIds);
+                //         $price = Service::where('id',$id)->first()->price;
+                //         $totalServicesPrice += $price;
 
-                    }
-                    }
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $insuranceDisc+$servicesDiscount;
-                    }
-
-
-                    if($doctor->discount_fees > 0 ) {
-                        $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-
-                    } else {
-                        $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
-                        $reservation->save();
-                    }
-                } elseif($reservation->type == 'sec_visit') {
-                    if($request->has('service_ids') ){
-                    $servicesIds = [];
-                    foreach($request->service_ids as $id){
-                        $servicesIds[] = $id;
-
-                        $reservation->services()->sync($servicesIds);
-                        $price = Service::where('id',$id)->first()->price;
-                        $totalServicesPrice += $price;
-
-                    }
-                    }
-                    if($request->has('insurance_percentage')){
-                        $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
-                        $insuranceDiscount = $insuranceDisc + $servicesDiscount;
-                    }
+                //     }
+                //     }
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $insuranceDisc+$servicesDiscount;
+                //     }
 
 
-                    $reservation->final_price =  $totalServicesPrice - $insuranceDiscount;
-                    $reservation->save();
-                }
+                //     if($doctor->discount_fees > 0 ) {
+                //         $reservation->final_price = $doctor->discount_fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+
+                //     } else {
+                //         $reservation->final_price = $doctor->fees + $totalServicesPrice - $insuranceDiscount;
+                //         $reservation->save();
+                //     }
+                // } elseif($reservation->type == 'sec_visit') {
+                //     if($request->has('service_ids') ){
+                //     $servicesIds = [];
+                //     foreach($request->service_ids as $id){
+                //         $servicesIds[] = $id;
+
+                //         $reservation->services()->sync($servicesIds);
+                //         $price = Service::where('id',$id)->first()->price;
+                //         $totalServicesPrice += $price;
+
+                //     }
+                //     }
+                //     if($request->has('insurance_percentage')){
+                //         $servicesDiscount = $totalServicesPrice * $insurancePercentage / 100;
+                //         $insuranceDiscount = $insuranceDisc + $servicesDiscount;
+                //     }
+
+
+                //     $reservation->final_price =  $totalServicesPrice - $insuranceDiscount;
+                //     $reservation->save();
+                // }
 
 
 
@@ -591,13 +595,21 @@ class ReservationController extends Controller
         return response()->json( $doctors);
     }
 
-        public function print(Request $request,$id)
+    public function print(Request $request,$id)
     {
         $reservation = Reservation::findOrFail($id);
         if ($request->user()->cannot('print', $reservation)) {
             abort(403);
         }
         return view('admin.pages.reservations.print',compact('reservation'));
+    }
+
+
+
+    public function SelectPaymentType($reservation_id)
+    {
+         $reservation = Reservation::findOrFail($reservation_id);
+        return view('admin.pages.reservations.payment_type',compact('reservation'));
     }
 
 

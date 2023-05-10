@@ -33,6 +33,7 @@
                             $doctors = [];
                             $services = [];
                             $paymentMethods = App\Models\PaymentMethod::pluck('name_ar', 'id');
+                            $companies = App\Models\Company::pluck('name', 'id');
                         @endphp
 
                         @include('inc.errors')
@@ -233,10 +234,11 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                    {!!Form::label('name', ' % النسبة المئوية لتحمل التأمين بدون ')!!}
+                                    {!!Form::label('name', 'النسبة المئوية لتحمل التأمين % ')!!}
                                         {!!Form::number('insurance_percentage', null,[
                                             'class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => '% النسبة المئوية لتحمل التأمين بدون '
+                                            'placeholder' => 'ادخل النسبة المئوية لتحمل التأمين بدون % مثال (10) ',
+                                            'step'=>'any',
                                         ])!!}
                                     </div>
                                 </div>
@@ -268,11 +270,12 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            {!!Form::label('name', 'الخدمات الإضافية ')!!}
-                                            <select name="service_ids[]" class="form-control js-multiple" multiple>
-                                            <option value="">إختار الخدمات الإضافية</option>
-
-                                            </select>
+                                            {!!Form::label('name', 'الشركة التي تم الحجز بواسطتها')!!}
+                                            {!! Form::select('company_id', $companies, null ,
+                                            ['class' => 'form-control  mt-1 mb-3',
+                                            'placeholder' => 'إختار الشركة ',
+                                            ])
+                                            !!}
                                         </div>
                                     </div>
 

@@ -9,15 +9,25 @@ class Reservation extends Model
 
     protected $table = 'reservations';
     public $timestamps = true;
-    protected $fillable = ['branch_id','client_id', 'time', 'date', 'doctor_id',
-     'status', 'type', 'insurance', 'insurance_percentage','insurance_discount',
-     'notes', 'payment_method_id' ,'final_price' 
-     ,'appointment_notes','sub_specialist_id','specialist_id','number'];
+    protected $guarded = ['id','created_at', 'updated_at'];
 
     public function client()
     {
         return $this->belongsTo('App\Models\Client');
     }
+
+
+    public function clientReservationPayment()
+    {
+        return $this->belongsTo('App\Models\ClientReservationPayment');
+    }
+
+
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company');
+    }
+
 
     public function invoice()
     {

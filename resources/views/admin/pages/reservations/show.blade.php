@@ -137,12 +137,10 @@
                                                         <td>{{ $type }}</td>
                                                     </tr>
                                                              <tr>
-                                                        <td>خدمات إضافية</td>
+                                                        <td>الشركة التي تم الحجز بواسطتها </td>
                                                         @if($reservation->services)
                                                         <td>
-                                                            @foreach ( $reservation->services as $r_service)
-                                                                {{ $loop->iteration }} . {{ $r_service->name_ar }}<br>
-                                                            @endforeach
+                                                            {{ $reservation->company->name }}
                                                         </td>
                                                         @else
 														<td>لا يوجد</td>

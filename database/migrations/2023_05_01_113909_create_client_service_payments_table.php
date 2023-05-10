@@ -15,6 +15,7 @@ return new class extends Migration
           	$table->id();
 			$table->decimal('amount');
             $table->decimal('remaining_amount')->nullable();
+            $table->decimal('discount')->nullable();
 			$table->string('notes')->nullable();
 			$table->unsignedBigInteger('branch_id')->nullable();
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade')->onUpdate('cascade');

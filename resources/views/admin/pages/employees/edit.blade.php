@@ -157,10 +157,11 @@
 
                                 <div class="form-group">
                                     {!!Form::label('name', 'الراتب :')!!}
-                                    {!!Form::number('salary', $emp->salary->amount,[
+                                    {!!Form::number('salary', $emp->salary,[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => 'أدخل الراتب ',
-                                        'min' => 0
+                                        'min' => 0,
+                                        'step'=>'any',
                                     ])!!}
                                 </div>
 

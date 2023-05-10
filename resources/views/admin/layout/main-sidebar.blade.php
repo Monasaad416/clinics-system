@@ -101,6 +101,18 @@
 						</ul>
 					</li>
 			        @endcan
+                    @can('reservations-list')
+					<li class="slide">
+						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg><span class="side-menu__label">الشركات</span><i class="angle fe fe-chevron-down"></i></a>
+						<ul class="slide-menu">
+							<li><a class="slide-item" href="{{ route('admin.companies.index') }}">قائمة الشركات</a></li>
+                            @can('reservations-create')
+							<li><a class="slide-item" href="{{ route('admin.companies.create') }}">إضافة شركة</a></li>
+                            @endcan
+							{{-- <li><a class="slide-item" href="{{ url('/' . $page='chart-chartjs') }}">رواتب الموظفين</a></li> --}}
+                        </ul>
+					</li>
+                    @endcan
 
                     @can('financila-list')
 						<li class="slide">
@@ -137,7 +149,8 @@
 							<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"/><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg><span class="side-menu__label">حسابات العملاء</span><i class="angle fe fe-chevron-down"></i></a>
 							<ul class="slide-menu">
                                 @can('superadmin')
-                                     <li><a class="slide-item" href="{{ route('livewire.clients_payments') }}">سندات القبض</a></li>
+                                     <li><a class="slide-item" href="{{ route('livewire.clients_reservations_payments') }}">سندات قبض الكشوفات</a></li>
+                                      <li><a class="slide-item" href="{{ route('livewire.clients_services_payments') }}">سندات قبض الخدمات</a></li>
                                 @endcan
 
                                 @can('reception_1')

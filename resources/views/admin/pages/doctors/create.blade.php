@@ -216,7 +216,7 @@
                             <div class="">
                                 <h3>المنشأة</h3>
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         @if(Auth::user()->roles_name == ["superadmin"])
                                             <div class="form-group">
                                                 {!!Form::label('name', 'إختار الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
@@ -237,23 +237,23 @@
                                     </div>
 
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label>أدخل راتب الطبيب</label>
-                                    <input  type="number" min="0" name="amount" class='form-control  mt-1 mb-3' placeholder= 'أدخل راتب الطبيب'>
+                                    <input type="number" min="0" name="amount" step="any"  class='form-control  mt-1 mb-3' placeholder= 'أدخل راتب الطبيب'>
 
                                 </div>
 
 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label>أدخل رسوم الكشف </label>
-                                    <input  type="number" min="0" name="fees" class='form-control  mt-1 mb-3' placeholder= 'أدخل  رسوم الكشف '>
+                                    <input type="number" min="0" name="fees" step="any" class='form-control  mt-1 mb-3' placeholder= 'أدخل  رسوم الكشف '>
                                 </div>
 
 
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <label>أدخل رسوم الكشف في حالة وجودخصم </label>
-                                    <input  type="number" min="0" name="discount_fees" class='form-control  mt-1 mb-3' placeholder= ' أدخل  رسوم الكشف في حالة وجود خصم '>
-                                </div>
+                                    <input  type="number" min="0" name="discount_fees" step="any"  class='form-control  mt-1 mb-3' placeholder= ' أدخل  رسوم الكشف في حالة وجود خصم '>
+                                </div> --}}
 
                             </div>
 

@@ -70,6 +70,7 @@ class EmployeeController extends Controller
                         'department_id' => $request->department_id,
                         'branch_id' => $request->branch_id,
                         'roles_name' => $request->roles_name,
+                        'salary' => $request->amount ? $request->amount : 0,
                 ]);
                 
                 $user->assignRole($request->input('roles_name'));
@@ -82,17 +83,18 @@ class EmployeeController extends Controller
                         'department_id' => $request->department_id,
                         'branch_id' => $request->branch_id,
                         'roles_name' => $request->roles_name,
+                        'salary' => $request->amount ? $request->amount : 0,
                 ]);
                 $user->assignRole($request->input('roles_name'));
             }
 
             $user = User::latest()->first();
-            $user->salary()->create([
-                'salariable_type' => 'App\Models\User',
-                'amount' => $request->salary ? $request->salary : 0 ,
-                'branch_id' =>$user->branch_id,
-                'details' => 'الراتب'
-            ]);
+            // $user->salary()->create([
+            //     'salariable_type' => 'App\Models\User',
+            //     'amount' => $request->salary ? $request->salary : 0 ,
+            //     'branch_id' =>$user->branch_id,
+            //     'details' => 'الراتب'
+            // ]);
 
             DB::commit(); 
             return redirect()->route('admin.employees.index')->with('success' ,'تم إضافة موظف جديد بنجاح.');
@@ -138,7 +140,8 @@ class EmployeeController extends Controller
                 'image' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp',
                 'department_id' => 'nullable|exists:departments,id',
                 'salary' => 'nullable|numeric|min:0',
-                'roles_name' => 'nullable'
+                'roles_name' => 'nullable',
+                'salary' => 'nullable|nullable',
             ]);
 
 
@@ -150,7 +153,10 @@ class EmployeeController extends Controller
             if($request->hasFile('image')) {
 
                 ///////////remove old image
-                unlink(public_path('uploads/employees/'. $employee->image));
+                if($employee->image){
+                    unlink(public_path('uploads/employees/'. $employee->image));
+                }
+                
 
                 $fileExtension = $request->image->getClientOriginalExtension();
                 $fileName = time().'.'.$fileExtension;
@@ -165,15 +171,16 @@ class EmployeeController extends Controller
                         'department_id' => $request->department_id,
                         'branch_id' => $request->branch_id,
                         'roles_name' => $request->roles_name,
+                        'salary' => $request->amount ? $request->amount : 0,
 
                 ]);
             } else {
                $employee->update($request->all());
             }
 
-            $employee->salary()->update([
-                'amount' => $request->salary
-            ]);
+            // $employee->salary()->update([
+            //     'amount' => $request->salary
+            // ]);
 
 
             return redirect()->route('admin.employees.index')->with('update' ,'تم تحديث بيانات الموظف  بنجاح.');
@@ -197,9 +204,7 @@ class EmployeeController extends Controller
 
         // Salary::where('salariable_type','App\Models\User')->where('salariable_id', $employee->id)->first()->delete();
 
-        if($employee->image){
-            unlink(public_path('uploads/employees/'. $employee->image));
-        }
+    
 
         $employee->delete();
         return redirect()->route('admin.employees.index')->with('delete' ,'تم حذف بيانات الموظف مؤقتا بنجاح.');
@@ -218,9 +223,13 @@ class EmployeeController extends Controller
     {
         $deletedEmployee = User::onlyTrashed()->where('id',$request->id)->first();
 
+        // if($deletedEmployee->image != null ){
+        //     unlink(public_path('uploads/employees/'. $deletedEmployee->image));
+        // }
 
 
-        Salary::where('salariable_type','App\Models\User')->where('salariable_id', $deletedEmployee->id)->first()->delete();
+
+       
 
 
         $deletedEmployee->forceDelete();

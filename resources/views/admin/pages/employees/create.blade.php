@@ -156,7 +156,8 @@
                                     {!!Form::number('salary', null,[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => 'أدخل الراتب ',
-                                        'min' => 0
+                                        'min' => 0,
+                                        'step'=>'any',
                                     ])!!}
                                 </div>
 

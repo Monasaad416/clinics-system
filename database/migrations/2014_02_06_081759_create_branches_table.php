@@ -20,6 +20,7 @@ class CreateBranchesTable extends Migration {
 			$table->string('phones');
 			$table->text('description_en')->nullable();
             $table->text('description_ar')->nullable();
+            $table->enum('status',['active','inactive']);
 			$table->timestamps();
 		});
 	}

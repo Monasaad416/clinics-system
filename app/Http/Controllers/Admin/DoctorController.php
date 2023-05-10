@@ -95,6 +95,7 @@ class DoctorController extends Controller
                     'specialist_id' => $request->specialist_id,
                     'first_come' => $request->first_come,
                     'stop_reservations' => $request->stop_reservations,
+                    'salary' => $request->amount ? $request->amount : 0.00 ,
                 ]);
 
 
@@ -156,55 +157,6 @@ class DoctorController extends Controller
 
 
 
-
-
-
-        //     $days = [];
-        //     foreach ($request->day_ids as $id){
-
-
-        //         if($newFrom1[$id-1] == $id) {
-
-        //             $doctor->days()->attach($id,[
-        //             'from' =>$newFrom1[$id-1] ,
-        //             'to' => $newTo1[$id-1],
-        //             'no_of_reservations' => $newReservations1[$id-1] ,
-        //         ]);
-        //         }
-        //         $idKey = $id -1;
-
-
-        //         if($request->from2 != null ){
-        //             if(in_array( $idKey ,$keysOfNewFrom2)){
-
-        //                 $doctor->days()->syncWithoutDetaching([$id,[
-        //                     'from' =>$newFrom2[$id-1] ,
-        //                     'to' => $newTo2[$id-1],
-        //                     'no_of_reservations' => $newReservations2[$id-1] ,
-        //                 ]]);
-
-        //         //     $doctor->days()->attach($id,[
-        //         //     'from' =>$newFrom1[$id-1] ,
-        //         //     'to' => $newTo1[$id-1],
-        //         //     'no_of_reservations' => $newReservations1[$id-1] ,
-        //         // ]);
-        //             }
-
-        //         }
-
-        // }
-
-
-
-            //insert into salary table
-            $doctor->salary()->create([
-                'salariable_type' =>  'App\Models\Doctor',
-                'salariable_id' => $doctor->id,
-                'amount' => $request->amount ? $request->amount : 0.00,
-                'details' => 'الراتب',
-                'branch_id' => $doctor->branch_id,
-            ]);
-
             DB::commit();
             return redirect()->route('admin.doctors.index')->with('success' ,'تم إضافة طبيب جديد بنجاح.');
 
@@ -219,7 +171,8 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        //
+        $doctor = Doctor::findOrFail($id);
+        return view('admin.pages.doctors.show',compact('doctor'));
     }
 
     /**
@@ -248,6 +201,19 @@ class DoctorController extends Controller
       try {
 
             $doctor = Doctor::findOrFail($request->doctor_id);
+            $doctor->update([
+                'name_ar' => $request->name_ar,
+                'name_en' => $request->name_en,
+                'about_ar' => $request->about_ar,
+                'about_en' => $request->about_en,
+                'phone' => $request->phone,
+                'gender' => $request->gender,
+                'email' => $request->email,
+                'doctor_title_id' => $request->doctor_title_id,
+                'fees' => $request->fees,
+                'branch_id' => $request->branch_id,
+                'salary' => $request->amount ? $request->amount : 0,
+            ]);
 
 
             // if ($request->user()->cannot('update', $doctor)) {
@@ -291,18 +257,7 @@ class DoctorController extends Controller
             }
 
 
-            $doctor->update([
-                'name_ar' => $request->name_ar,
-                'name_en' => $request->name_en,
-                'about_ar' => $request->about_ar,
-                'about_en' => $request->about_en,
-                'phone' => $request->phone,
-                'gender' => $request->gender,
-                'email' => $request->email,
-                'doctor_title_id' => $request->doctor_title_id,
-                'fees' => $request->fees,
-                'branch_id' => $request->branch_id,
-            ]);
+    
 
 
             if($request->hasFile('professional_image')){
@@ -334,109 +289,58 @@ class DoctorController extends Controller
 
             //adjust appointments
 
-            $appointments = Appointment::where('doctor_id',$request->doctor_id)->delete();
+            if($request->day_ids){
+                $appointments = Appointment::where('doctor_id',$request->doctor_id)->delete();
 
-            $newFrom1 = array_filter($request->from1);
-            $newFrom2 = array_filter($request->from2);
-            $keysOfNewFrom2 = array_keys($newFrom2);
-            $keysOfDays = array_keys($request->day_ids);
-            $newTo1 = array_filter($request->to1);
-            $newTo2 =  array_filter($request->to2) ;
-            $newReservations1 = array_filter($request->no_of_reservations1);
-            $newReservations2 =  array_filter($request->no_of_reservations2);
-            foreach ($request->day_ids as $id){
+                $newFrom1 = array_filter($request->from1);
+                $newFrom2 = array_filter($request->from2);
+                $keysOfNewFrom2 = array_keys($newFrom2);
+                $keysOfDays = array_keys($request->day_ids);
+                $newTo1 = array_filter($request->to1);
+                $newTo2 =  array_filter($request->to2) ;
+                $newReservations1 = array_filter($request->no_of_reservations1);
+                $newReservations2 =  array_filter($request->no_of_reservations2);
+                foreach ($request->day_ids as $id){
 
-                Appointment::create([
-                    'day_id'=> $id,
-                    'doctor_id'=> $doctor->id,
-                    'from' =>$newFrom1[$id-1] ,
-                    'to' => $newTo1[$id-1],
-                    'no_of_reservations' => $newReservations1[$id-1] ,
-                ]);
+                    Appointment::create([
+                        'day_id'=> $id,
+                        'doctor_id'=> $doctor->id,
+                        'from' =>$newFrom1[$id-1] ,
+                        'to' => $newTo1[$id-1],
+                        'no_of_reservations' => $newReservations1[$id-1] ,
+                    ]);
 
-                $idKey = $id -1;
+                    $idKey = $id -1;
 
-                if($request->from2 != null ){
-                    if(in_array( $idKey ,$keysOfNewFrom2)){
-                        Appointment::create([
-                            'day_id'=> $id,
-                            'doctor_id'=> $doctor->id,
-                            'from' =>$newFrom2[$id-1] ,
-                            'to' => $newTo2[$id-1],
-                            'no_of_reservations' => $newReservations2[$id-1] ,
-                        ]);
+                    if($request->from2 != null ){
+                        if(in_array( $idKey ,$keysOfNewFrom2)){
+                            Appointment::create([
+                                'day_id'=> $id,
+                                'doctor_id'=> $doctor->id,
+                                'from' =>$newFrom2[$id-1] ,
+                                'to' => $newTo2[$id-1],
+                                'no_of_reservations' => $newReservations2[$id-1] ,
+                            ]);
+                        }
+
+
+
                     }
-
-
-
                 }
             }
 
 
-                //             $newFrom1 = array_filter($request->from1);
-                // $newFrom2 = array_filter($request->from2);
-                // $newTo1 = array_filter($request->to1);
-                // $newTo2 =  array_filter($request->to2) ;
-                // $keysOfNewFrom2 = array_keys($newFrom2);
-                // $newReservations1 = array_filter($request->no_of_reservations1);
-                // $newReservations2 =  array_filter($request->no_of_reservations2);
-                // return dd($newFrom1, $newFrom2, $newTo1,$newTo2);
-
-
-            // if($request->has('day_ids')){
-            //     $newFrom1 = array_filter($request->from1);
-            //     $newFrom2 = array_filter($request->from2);
-            //     $newTo1 = array_filter($request->to1);
-            //     $newTo2 =  array_filter($request->to2) ;
-            //     $keysOfNewFrom2 = array_keys($newFrom2);
-            //     $newReservations1 = array_filter($request->no_of_reservations1);
-            //     $newReservations2 =  array_filter($request->no_of_reservations2);
-
-
-            //     $appointments = Appointment::where('day_id' , $id)->where('doctor_id',$request->doctor_id)->get();
-            //     $appointment1 = $appointments[0];
-            //     $appointment2 = $appointments[1];
-
-            //     foreach ($request->day_ids as $id){
-
-
-            //     if($request->from1 != null ) {
-            //         $appointment1->update([
-            //             'from' =>$newFrom1[$id-1] ,
-            //             'to' => $newTo1[$id-1],
-            //             'no_of_reservations' => $newReservations1[$id-1] ,
-            //         ]);
-            //     }
-
-            //     $idKey = $id -1;
-
-            //     if($request->from2 != null && $appointments->count() == 2 ){
-
-            //         if(in_array( $idKey ,$keysOfNewFrom2)){
-            //             $appointment2->update([
-
-            //                 'from' => $newFrom2[$idKey] ,
-            //                 'to' => $newTo2[$idKey],
-            //                 'no_of_reservations' => $newReservations2[$idKey] ,
-            //             ]);
-            //         }
-
-
-
-            //     }
-            //     }
-            // }
 
             //update to salary table
-            if($request->has('salary')){
-                $doctor->salary()->where('salariable_type','App\Models\Doctor')->where('salariable_id',$doctor->id)->update([
-                'salariable_id' => $doctor->id,
-                'amount' => $request->salary,
-                'details' => 'الراتب',
-                 'branch_id' => $doctor->branch_id,
-            ]);
+            // if($request->has('salary')){
+            //     $doctor->salary()->where('salariable_type','App\Models\Doctor')->where('salariable_id',$doctor->id)->update([
+            //     'salariable_id' => $doctor->id,
+            //     'amount' => $request->salary,
+            //     'details' => 'الراتب',
+            //      'branch_id' => $doctor->branch_id,
+            // ]);
 
-            }
+            // }
 
 
             if($request->hasFile('professional_image')){

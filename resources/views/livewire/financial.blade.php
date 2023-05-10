@@ -197,7 +197,7 @@
 								<th>مبلغ الكشف بعد التخفيض</th>
 								<th>نسبة تحمل التأمين</th>
 								<th>مستحقات التأمين</th> --}}
-								<th>صافي المبلغ بعد خصم مستحقات التأمين </th>
+								<th>صافي مبلغ الكشف بعد خصم مستحقات التأمين </th>
 								{{-- <th>طباعة</th> --}}
 							</tr>
 						</thead>
@@ -228,42 +228,12 @@
 									<td>كشف</td>
 									<td>دخل</td>
 
-									@if($reservation->doctor->discount_fees > 0 )
-									<td>{{ $reservation->doctor->discount_fees - $reservation->insurance_discount}}</td>
-									@else
-									<td>{{ $reservation->doctor->fees - $reservation->insurance_discount}}</td>
-									@endif
+							
+									<td>{{ $reservation->final_price}}</td>
+								
 
 
-									{{-- <td>
-										<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_reservation{{ $reservation->id }}" title="طباعة الفاتورة "><i class="fas fa-print"></i></button></td>
-														<!-- Delete Modal -->
-										<form action="{{route('admin.reservations.destroy',$reservation)}}" method="POST">
-											<div class="modal fade" id="delete_reservation{{$reservation->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-												<div class="modal-dialog" role="document">
-												<div class="modal-content">
-													<div class="modal-header">
-													<h5 class="modal-title" id="exampleModalLabel">حذف الحجز من قائمة الحجوزات</h5>
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-													</div>
-													<div class="modal-body">
-														<p>هل انت متأكد من حذف الحجز   {{$reservation->name_ar}}</p>
-
-															@csrf
-															{{method_field('delete')}}
-															<input type="hidden" value="{{$reservation->id}}" name="id">
-															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-																<button type="submit" name="submit" class="btn btn-danger">حذف</button>
-															</div>
-													</div>
-												</div>
-												</div>
-											</div>
-										</form>
-									</td> --}}
+	
 								</tr>
 							@endforeach
 

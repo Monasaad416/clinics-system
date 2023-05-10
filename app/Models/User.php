@@ -21,7 +21,8 @@ class User extends Authenticatable
         'image',
         'department_id',
         'roles_name',
-        'branch_id'
+        'branch_id',
+        'salary',
     ];
 
 

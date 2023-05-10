@@ -125,7 +125,8 @@
                                     {!!Form::number('price', null,[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => 'السعر الأصلي ',
-                                        'min' => 0 
+                                        'min' => 0 ,
+                                        'step'=>'any',
                                     ])!!}
                                 </div>
 
@@ -134,7 +135,8 @@
                                     {!!Form::number('discount_price', null,[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => 'سعر العرض ',
-                                         'min' =>0 
+                                        'min' =>0 ,
+                                        'step'=>'any',
                                     ])!!}
                                 </div>
 
@@ -143,7 +145,8 @@
                                     {!!Form::number('discount_percentage', null,[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => 'نسبة الخصم ',
-                                         'min' =>0 
+                                        'min' =>0 ,
+                                        'step'=>'any',
                                     ])!!}
                                 </div>
 

@@ -30,6 +30,7 @@ class CreateDoctorsTable extends Migration {
 			$table->unsignedBigInteger('doctor_title_id')->nullable();
             $table->foreign('doctor_title_id')->references('id')->on('doctor_titles')->onDelete('set null')->onUpdate('set null');
 			$table->decimal('fees');
+			$table->decimal('salary');
 			$table->decimal('discount_fees')->nullable();
 			$table->enum('first_come',['yes','no']);
 			$table->enum('stop_reservations',['yes','no']);

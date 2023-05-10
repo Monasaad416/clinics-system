@@ -21,4 +21,11 @@ class Specialist extends Model
         return $this->hasMany('App\Models\Doctor');
     }
 
+
+        public function services()
+    {
+        return $this->hasMany('App\Models\Service');
+    }
+
+
 }

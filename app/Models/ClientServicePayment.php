@@ -9,7 +9,7 @@ class ClientServicePayment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'amount','notes','branch_id','payment_method_id','remaining_amount','doctor_id','specialist_id','sub_specialist_id','reservation_id','service_id'];
+    protected $guarded = [ 'id','created_at','updated_at'];
 
         public function branch()
     {
@@ -36,7 +36,7 @@ class ClientServicePayment extends Model
         return $this->belongsTo(SubXpecialist::class);
     }
 
-            public function servive()
+            public function service()
     {
         return $this->belongsTo(Service::class);
     }

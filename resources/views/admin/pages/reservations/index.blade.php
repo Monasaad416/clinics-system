@@ -168,7 +168,7 @@
 														</td> --}}
 
                                                         <td>
-														<a href="{{ route('admin.client_payment.create',['reservation_id'=>$reservation->id]) }}" class="btn btn-success btn-sm" role="button" aria-pressed="true" title="المحايبة المالية للعميل"><i class="fas fa-money-bill-wave"></i></a>
+														   <a href="{{ route('admin.payment_type.select',['reservation_id'=>$reservation->id]) }}" class="btn btn-success btn-sm" role="button" aria-pressed="true" title="المحاسبة المالية للعميل"><i class="fas fa-money-bill-wave"></i></a>
 														</td>
                                                 </tr>
                                             @endforeach

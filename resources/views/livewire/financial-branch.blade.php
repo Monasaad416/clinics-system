@@ -222,11 +222,7 @@
 									<td>كشف</td>
 									<td>دخل</td>
 
-									@if($reservation->doctor->discount_fees > 0 )
-									<td>{{ $reservation->doctor->discount_fees - $reservation->insurance_discount}}</td>
-									@else
-									<td>{{ $reservation->doctor->fees - $reservation->insurance_discount}}</td>
-									@endif
+									<td>{{ $reservation->final_price}}</td>
 
 								</tr>
 							@endforeach

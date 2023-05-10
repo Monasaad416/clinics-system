@@ -42,9 +42,13 @@
                                                 <th>التخصص الرئيسي </th>
                                                 <th>التخصصات الفرعية</th>
 												<th>الراتب </th>
-                                                <th>تاريخ الإلتحاق </th>
+                                                {{-- <th>تاريخ الإلتحاق </th> --}}
                                                 @can('dashboard')
                                                 <th>الفرع</th>
+                                                @endcan
+                                                 <th>رسوم الكشف</th>
+                                                @can('financila-list')
+                                                <th>الكشوفات الفعلية</th>
                                                 @endcan
                                                 @can('doctors-edit')
                                                 <th>تحديث</th>
@@ -89,13 +93,21 @@
                                                             {{ $sub_special->name_ar}}<br>
                                                         @endforeach
                                                     </td>
-                                                    <td>{{ $doctor->salary->amount }}</td>
+                                                    <td>{{ $doctor->salary }}</td>
 													
-
-                                                    <td>{{Carbon\Carbon::parse($doctor->created_at)->format('d M ,Y')}}</td>
+{{-- 
+                                                    <td>{{Carbon\Carbon::parse($doctor->created_at)->format('d M ,Y')}}</td> --}}
                                                     @can('dashboard')
                                                         <td>{{$doctor->branch->name_ar}}</td>
                                                     @endcan
+                                                    <td>{{$doctor->fees}}</td>
+                                                    @can('financila-list')
+                                                        <td>
+                                                            <a href="{{route('admin.doctors.show',$doctor->id)}}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" title=" الكشوفات الفعلية "><i class="fa fa-eye text-white" aria-hidden="true"></i></a>
+                                                        </td>
+                                                    @endcan
+                                                 
+
                                                     @can('doctors-edit')
                                                     <td>
                                                         <a href="{{route('admin.doctors.edit',$doctor->id)}}" class="btn btn-info btn-sm" role="button" aria-pressed="true" title="تحديث بيانات الطبيب"><i class="fa fa-edit text-white" aria-hidden="true"></i></a>

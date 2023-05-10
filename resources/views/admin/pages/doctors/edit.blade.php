@@ -221,7 +221,7 @@
                             <div class="">
                                 <h3>المنشأة</h3>
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         {!!Form::label('about_ar', 'الفرع :')!!}
                                         @if(Auth::user()->roles_name == ["superadmin"])
                                             <div class="form-group">
@@ -240,25 +240,26 @@
                                         @endif
 
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             {!!Form::label('name', 'الراتب :')!!}
-                                            {!!Form::number('salary', $doctor->salary->amount,[
+                                            {!!Form::number('amount', $doctor->salary,[
                                                 'class' => 'form-control  mt-1 mb-3',
                                                 'placeholder' => 'أدخل الراتب ',
-                                                'min' => 0
+                                                'min' => 0,
+                                                'step'=>'any',
                                             ])!!}
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
 
                                         <label>رسوم الكشف</label>
-                                        <input  type="number" min="0" name="fees" class='form-control  mt-1 mb-3' value="{{ $doctor->fees}}" placeholder= 'أدخل  رسوم الكشف '>
+                                        <input  type="number" min="0" step="any" name="fees" class='form-control  mt-1 mb-3' value="{{ $doctor->fees}}" placeholder= 'أدخل  رسوم الكشف '>
                                     </div>
-                                    <div class="col-md-3">
+                                    {{-- <div class="col-md-3">
                                         <label>رسوم الكشف في حالة وجود خصم</label>
-                                        <input  type="number" min="0" name="discount_fees" class='form-control  mt-1 mb-3' value="{{ $doctor->discount_fees}}" placeholder= ' أدخل  رسوم الكشف في حالة وجود خصم '>
-                                    </div>
+                                        <input  type="number" step="any" min="0" name="discount_fees" class='form-control  mt-1 mb-3' value="{{ $doctor->discount_fees}}" placeholder= ' أدخل  رسوم الكشف في حالة وجود خصم '>
+                                    </div> --}}
                                 </div>
 
                             </div>
