@@ -74,7 +74,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            {!!Form::label('name_en', ' الأسم باللغة الإنجليزية:')!!}   
+                                            {!!Form::label('name_en', ' الأسم باللغة الإنجليزية:')!!}
                                             {!!Form::text('name_en', null,[
                                                 'class' => 'form-control  mt-1 mb-3',
                                                 'placeholder' => 'أدخل الأسم  بالإنجليزية'
@@ -153,7 +153,7 @@
                                             {!!Form::label('name', 'المسمي الوظيفي ')!!}
                                             {!! Form::select('doctor_title_id', $doctorTitles, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => ' إختار المسمي الوظيفي ',
+                                                'placeholder' => ' إختر المسمي الوظيفي ',
                                                 ])
                                             !!}
                                         </div>
@@ -164,7 +164,7 @@
                                              {!!Form::label('name', 'اللقب المهني')!!}
                                             {!! Form::select('professional_title_id', $professionalTitles, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => ' إختار اللقب المهني ',
+                                                'placeholder' => ' إختر اللقب المهني ',
                                                 ])
                                             !!}
                                         </div>
@@ -174,10 +174,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                             <div class="form-group">
-                                        {!!Form::label('name', 'إختار التخصص الرئيسي')!!}<span class="text-danger font-weight-bolder">*</span>
+                                        {!!Form::label('name', 'إختر التخصص الرئيسي')!!}<span class="text-danger font-weight-bolder">*</span>
                                         {!! Form::select('specialist_id', $specialists, null ,
                                             ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => ' إختار التخصص الرئيسي',
+                                                'placeholder' => ' إختر التخصص الرئيسي',
                                             ])
                                         !!}
                                     </div>
@@ -185,9 +185,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                        <label>إختار التخصص الفرعي</label>
+                                        <label>إختر التخصص الفرعي</label>
                                         <select style="border-color: gray" class="js-example-basic-multiple form-control" name="sub_specialist_ids[]" multiple="multiple">
-                                        <option value="">إختارالتخصص الفرعي  </option>
+                                        <option value="">إخترالتخصص الفرعي  </option>
 
 
                                         </select>
@@ -216,18 +216,20 @@
                             <div class="">
                                 <h3>المنشأة</h3>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                   
+                                    <div class="col-md-6">
                                         @if(Auth::user()->roles_name == ["superadmin"])
                                             <div class="form-group">
-                                                {!!Form::label('name', 'إختار الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
+                                                {!!Form::label('name', 'إختر الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
                                                 {!! Form::select('branch_id', $branches, null ,
                                                     ['class' => 'form-control  mt-1 mb-3',
-                                                    'placeholder' => 'إختار الفرع',
+                                                    'placeholder' => 'إختر الفرع',
                                                     ])
                                                 !!}
                                             </div>
                                         @else
                                             <div class="form-group">
+                                                 <label>إختار الفرع </label>
                                                 <select name='branch_id' class="form-control">
                                                     <option value="{{(Auth::user()->branch->id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
                                                 </select>
@@ -237,14 +239,14 @@
                                     </div>
 
 
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <label>أدخل راتب الطبيب</label>
                                     <input type="number" min="0" name="amount" step="any"  class='form-control  mt-1 mb-3' placeholder= 'أدخل راتب الطبيب'>
 
-                                </div>
+                                </div> --}}
 
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label>أدخل رسوم الكشف </label>
                                     <input type="number" min="0" name="fees" step="any" class='form-control  mt-1 mb-3' placeholder= 'أدخل  رسوم الكشف '>
                                 </div>
@@ -258,7 +260,7 @@
                             </div>
 
                             <div class="form-group">
-                                <option>إختار الأيام المتاحة للعمل</option>
+                                <option>إختر الأيام المتاحة للعمل</option>
                                     @foreach ( App\Models\Day::all() as $day)
                                         <input type="checkbox" name="day_ids[]" class="mycheckbox" value="{{$day->id}}" />{{$day->day_ar}}
                                         <div style="display:none">
@@ -280,7 +282,7 @@
                                                 <input type="number" name="no_of_reservations2[]" class="col-3">
                                             </div>
                                         </div>
-{{-- 
+{{--
                                         <input type ="hidden" name="id" value={{ $day->id }}> --}}
                                     <br>
                                     @endforeach
@@ -292,7 +294,7 @@
                                     <div class="form-group">
                                         <label for="">الحجز بأولوية الحضور</label><span class="text-danger font-weight-bolder">*</span>
                                         <select name='first_come' class ='form-control  mt-1 mb-3'>
-                                            <option value="0" >--إختار--</option>
+                                            <option value="0" >--إختر--</option>
                                             <option value="yes" >نعم</option>
                                             <option value="no" >لا</option>
                                         </select>
@@ -303,7 +305,7 @@
                                     <div class="form-group">
                                         <label for="">توقف الحجز بعد أول كشف  </label><span class="text-danger font-weight-bolder">*</span>
                                         <select name='stop_reservations' class ='form-control  mt-1 mb-3'>
-                                            <option value="0" >--إختار--</option>
+                                            <option value="0" >--إختر--</option>
                                             <option value="yes" >نعم</option>
                                             <option value="no" >لا</option>
                                         </select>
@@ -348,7 +350,7 @@
                     dataType:"json",
                     success: function (data) {
                         $('select[name="sub_specialist_ids[]"]').empty();
-                        $('select[name="sub_specialist_ids[]"]').append('<option value="selected disabled">إختار التخصص الفرعي</option>');
+                        $('select[name="sub_specialist_ids[]"]').append('<option value="selected disabled">إختر التخصص الفرعي</option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="sub_specialist_ids[]"]').append('<option value="' + key + '">' + value + '</option>');
@@ -360,8 +362,39 @@
                 console.log('AJAX load did not work');
             }
         });
+
+
+        var specialist_id = $('select[name="specialist_id"]').val();
+
+        if (specialist_id) {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ URL::to("/admin/getSubSpecialistsBySpecialist") }}/" + specialist_id,
+                type: "GET",
+                dataType:"json",
+                success: function (data) {
+                    $('select[name="sub_specialist_ids[]"]').empty();
+                    $('select[name="sub_specialist_ids[]"]').append('<option value="selected disabled">إختر التخصص الفرعي</option>');
+                    $.each(data, function (key, value) {
+
+                        $('select[name="sub_specialist_ids[]"]').append('<option value="' + key + '">' + value + '</option>');
+                    });
+                },
+
+            });
+        } else {
+            console.log('AJAX load did not work');
+        }
+
+
+
+
     });
-    </script>
+</script>
 
 
 <script>

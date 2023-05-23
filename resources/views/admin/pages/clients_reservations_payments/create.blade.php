@@ -7,7 +7,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">دفع رسوم الكشف للحجز رقم {{ $reservation->number }}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ سندات القبض</span>
+                <h4 class="content-title mb-0 my-auto">دفع رسوم الكشف للحجز رقم {{ $reservation->number }}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ أذونات القبض</span>
             </div>
         </div>
 
@@ -137,33 +137,33 @@
 
 
                                 <div class="col-md-6 my-4">
-                                        <div class="form-group">
-                                            {!! Form::label('name','مبلغ الخصم  ')!!}
-                                            {!! Form::number('discount', 0 ,
-                                            ['class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'مبلغ الخصم   ',
-                                            'step' => "any" ,
-                                            'value' => 0,
-                                            'id' => 'discount',
-                                            ])
-                                            !!}
-                                        </div>
+                                    <div class="form-group">
+                                        {!! Form::label('name','مبلغ الخصم  ')!!}
+                                        {!! Form::number('discount', 0 ,
+                                        ['class' => 'form-control  mt-1 mb-3',
+                                        'placeholder' => 'مبلغ الخصم   ',
+                                        'step' => "any" ,
+                                        'value' => 0,
+                                        'id' => 'discount',
+                                        ])
+                                        !!}
                                     </div>
+                                </div>
 
-                                    <div class="col-md-6 my-4">
-                                        <div class="form-group">
-                                            {!! Form::label('name','الإجمالي')!!}
-                                            {!! Form::number('total', null ,
-                                            ['class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'إجمالي المبلغ',
-                                            'step' => "any" ,
-                                            'value' => 0,
-                                            'readonly' => true,
-                                            'id' => 'total',
-                                            ])
-                                            !!}
-                                        </div>
+                                <div class="col-md-6 my-4">
+                                    <div class="form-group">
+                                        {!! Form::label('name','الإجمالي')!!}
+                                        {!! Form::number('total', null ,
+                                        ['class' => 'form-control  mt-1 mb-3',
+                                        'placeholder' => 'إجمالي المبلغ',
+                                        'step' => "any" ,
+                                        'value' => 0,
+                                        'readonly' => true,
+                                        'id' => 'total',
+                                        ])
+                                        !!}
                                     </div>
+                                </div>
 
                                     {{-- <div class="col-md-6 my-4">
                                         <div class="form-group">
@@ -210,10 +210,10 @@
 
                                     <div class="col-md-6 my-4">
                                         <div class="form-group">
-                                            {!! Form::label('name','إختار طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
+                                            {!! Form::label('name','إختر طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
                                             {!! Form::select('payment_method_id', $paymentMethods, null ,
                                             ['class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'إختار طريقة الدفع',
+                                            'placeholder' => 'إختر طريقة الدفع',
                                             ])
                                             !!}
                                         </div>
@@ -306,186 +306,10 @@
 
 
 
-    // .addEventListener('click', function (event) {
-    //     if (event.target && event.target.matches("input[type='radio']")) {
-    //         let fees = parseFloat(document.getElementById("firstVisitFees").value);
-    //         console.log(fees);
 
-    //         document.getElementById("total").value = fees;
-    //     }
-    // });
-
-    // document.getElementById("secVisit").on('change', function() {
-    //         document.getElementById("total").setAttribute('value',0);
-    // });
-
-    // document.getElementById("secVisit").addEventListener('click', function (event) {
-    //     if (event.target && event.target.matches("input[type='radio']")) {
-    //         document.getElementById("total").setAttribute('value', 0 );
-    //         document.getElementById("secVisit").on('change', function() {
-    //             document.getElementById("total").setAttribute('value',0);
-    //         });
-    //         let fees = parseFloat(document.getElementById("secVisitFees").value);
-    //         console.log(fees);
-    //         document.getElementById("total").value = fees;
-
-    //         // let servicesFees = parseFloat(document.getElementById("servicesFees").value);
-
-    //         // let total= parseFloat(fees + servicesFees);
-    //         // document.getElementById("total").value = total;
-    //     }
-    // });
 </script>
 
 
-
-
-{{-- select services by branch --}}
-<script>
-  $(document).ready(function () {
-        $('select[name="branch_id"]').on('change', function () {
-            let branchId = $(this).val();
-            console.log(branchId);
-
-            if (branchId ) {
-                    $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ URL::to("/admin/getServicesByBranch") }}/" + branchId ,
-                    type: "GET",
-                    dataType:"json",
-                    success: function (data) {
-                      console.log(data)
-
-                        $('select[name="service_ids[]"]').empty();
-                        $('select[name="service_ids[]"]').append('<option value="selected disabled">إختار الخدمات الإضافية </option>');
-                          $.each(data, function (key, value) {
-
-                            $('select[name="service_ids[]"]').append('<option value="' + key + '">' + value+ '</option>');
-                        });
-                    },
-
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-    });
-</script>
-
-{{-- select doctore by specialist and branch --}}
-<script>
-  $(document).ready(function () {
-        $('select[name="specialist_id"]').on('change', function () {
-            let specialist_id = $(this).val();
-            let branch_id = $("#branch_id").val();
-            console.log("jjjjjjj");
-            console.log(branch_id);
-
-
-            if (specialist_id) {
-                console.log(specialist_id);
-                    $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ URL::to("/admin/getDoctorsBySpecialistAndBranch") }}/" + specialist_id + "/" + branch_id,
-                    type: "GET",
-                    dataType:"json",
-                    success: function (data) {
-                        console.log(data);
-                        $('select[name="doctor_id"]').empty();
-                        $('select[name="doctor_id"]').append('<option value="selected disabled">إختار الطبيب </option>');
-                        $.each(data, function (key, value) {
-
-                            $('select[name="doctor_id"]').append('<option value="' + key + '">' + value + '</option>');
-                        });
-                    },
-
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-    });
-</script>
-{{-- select subspecialist by specialist --}}
-<script>
-  $(document).ready(function () {
-        $('select[name="specialist_id"]').on('change', function () {
-            let specialist_id = $(this).val();
-            //console.log(specialist_id);
-            if (specialist_id) {
-                    $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ URL::to("/admin/getSubSpecialistsBySpecialist") }}/" + specialist_id,
-                    type: "GET",
-                    dataType:"json",
-                    success: function (data) {
-                        $('select[name="sub_specialist_id"]').empty();
-                        $('select[name="sub_specialist_id"]').append('<option value="0" selected disabled>إختار التخصص الفرعي</option>');
-                        $.each(data, function (key, value) {
-
-                            $('select[name="sub_specialist_id"]').append('<option value="' + key + '">' + value + '</option>');
-                        });
-                    },
-
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-    });
-</script>
-
-
-{{-- select doctore by subspecialist --}}
-<script>
-  $(document).ready(function () {
-        $('select[name="sub_specialist_id"]').on('change', function () {
-            let sub_specialist_id = $(this).val();
-            let branch_id = $("#branch_id").val();
-            console.log(sub_specialist_id);
-            console.log(branch_id);
-
-
-            if (sub_specialist_id) {
-                console.log(sub_specialist_id);
-                    $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ URL::to("/admin/getDoctorsBySubSpecialistAndBranch") }}/" + sub_specialist_id + "/" + branch_id,
-                    type: "GET",
-                    dataType:"json",
-                    success: function (data) {
-                        console.log(data);
-                        $('select[name="doctor_id"]').empty();
-                        $('select[name="doctor_id"]').append('<option value="selected disabled">إختار الطبيب </option>');
-                        $.each(data, function (key, value) {
-
-                            $('select[name="doctor_id"]').append('<option value="' + key + '">' + value + '</option>');
-                        });
-                    },
-
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-    });
-</script>
     <script>
         $(document).ready(function () {
             $('select[name="type_id"]').on('change', function () {
@@ -506,7 +330,7 @@
                         success: function (data) {
                             console.log(data);
                             $('select[name="employee_id"]').empty();
-                             $('select[name="employee_id"]').append('<option value="" selected disabled >إختار الإسم</option>');
+                             $('select[name="employee_id"]').append('<option value="" selected disabled >إختر الإسم</option>');
                             $.each(data, function (key, value) {
                                 $('select[name="employee_id"]').append('<option value="' + key + '">' + value + '</option>');
                             });

@@ -103,6 +103,14 @@ class DoctorController extends Controller
             $doctor = Doctor::latest()->first();
 
 
+            $doctor->salary()->create([
+                'salariable_type' => 'App\Models\Doctor',
+                'amount' => $request->salary ? $request->salary : 0 ,
+                'branch_id' =>$doctor->branch_id,
+                'details' => 'الراتب'
+            ]);
+
+
             if($request->sub_specialist_ids){
 
                 $subSpecialistsIds = [];
@@ -207,6 +215,7 @@ class DoctorController extends Controller
                 'about_ar' => $request->about_ar,
                 'about_en' => $request->about_en,
                 'phone' => $request->phone,
+                'specialist_id' => $request->specialist_id,
                 'gender' => $request->gender,
                 'email' => $request->email,
                 'doctor_title_id' => $request->doctor_title_id,
@@ -257,7 +266,7 @@ class DoctorController extends Controller
             }
 
 
-    
+
 
 
             if($request->hasFile('professional_image')){
@@ -282,9 +291,9 @@ class DoctorController extends Controller
 
 
             //update doctor_sub_specialists table
-            if($request->has('sub_specialist_ids')) {
+           
                 $doctor->subSpecialists()->sync($request->sub_specialist_ids);
-            }
+         
 
 
             //adjust appointments
@@ -332,15 +341,15 @@ class DoctorController extends Controller
 
 
             //update to salary table
-            // if($request->has('salary')){
-            //     $doctor->salary()->where('salariable_type','App\Models\Doctor')->where('salariable_id',$doctor->id)->update([
-            //     'salariable_id' => $doctor->id,
-            //     'amount' => $request->salary,
-            //     'details' => 'الراتب',
-            //      'branch_id' => $doctor->branch_id,
-            // ]);
+            if($request->has('salary')){
+                $doctor->salary()->where('salariable_type','App\Models\Doctor')->where('salariable_id',$doctor->id)->update([
+                'salariable_id' => $doctor->id,
+                'amount' => $request->salary,
+                'details' => 'الراتب',
+                 'branch_id' => $doctor->branch_id,
+            ]);
 
-            // }
+            }
 
 
             if($request->hasFile('professional_image')){

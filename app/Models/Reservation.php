@@ -63,11 +63,10 @@ class Reservation extends Model
 
 
 
-
-    public function services()
-    {
-        return $this->belongsToMany('App\Models\Service')->withTimestamps();
-    }
+    // public function services()
+    // {
+    //     return $this->belongsToMany('App\Models\Service')->withTimestamps();
+    // }
 
     public function payment()
     {

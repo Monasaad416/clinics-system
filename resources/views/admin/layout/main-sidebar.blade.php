@@ -28,13 +28,32 @@
 					@can('admin_1')
 					gggggggggggggggg
 					@endcan --}}
-					@if(auth()->user()->can('dashboard'))
+					@if(auth()->user()->can('superadmin'))
 					    <li class="slide">
 							<a class="side-menu__item" href="{{ route('index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">الرئيسية</span></a>
 						</li>
 
 						<li class="slide">
 							<a class="side-menu__item" href="{{ route('admin.settings.edit') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">الإعدادات</span></a>
+						</li>
+				    @endif
+
+					@if(auth()->user()->can('admin_1'))
+					    <li class="slide">
+							<a class="side-menu__item" href="{{ route('index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">الرئيسية</span></a>
+						</li>
+				    @endif
+
+					@if(auth()->user()->can('admin_2'))
+					    <li class="slide">
+							<a class="side-menu__item" href="{{ route('index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">الرئيسية</span></a>
+						</li>
+				    @endif
+
+
+					@if(auth()->user()->can('admin_3'))
+					    <li class="slide">
+							<a class="side-menu__item" href="{{ route('index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg><span class="side-menu__label">الرئيسية</span></a>
 						</li>
 				    @endif
 
@@ -120,24 +139,41 @@
 							<ul class="slide-menu">
 
 								@can('admin_1')
-									<li><a class="slide-item" href="{{ route('financial_results_branch') }}">حساب الأرباح</a></li>
-                                    <li><a class="slide-item" href="{{ route('financial_payments_branch') }}">سندات الصرف</a> </a></li>
+									<li><a class="slide-item" href="{{ route('financial_results_branch') }}"> تقارير الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_distribution_branch') }}"> ارباح الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_results_branch')}}"> تقارير الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_distribution_branch') }}"> ارباح الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('payments_vouchers_branch') }}">أذونات الصرف</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_general_report_branch') }}">تقرير الأرباح والخسائر</a> </li>
 								@endcan
 
 								@can('admin_2')
-									<li><a class="slide-item" href="{{ route('financial_results_branch') }}">حساب الأرباح</a></li>
-                                    <li><a class="slide-item" href="{{ route('financial_payments_branch') }}">سندات الصرف</a> </a></li>
+									<li><a class="slide-item" href="{{ route('financial_results_branch') }}"> تقارير الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_distribution_branch') }}"> ارباح الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_results_branch')}}"> تقارير الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_distribution_branch') }}"> ارباح الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('payments_vouchers_branch') }}">أذونات الصرف</a></li>
+                                     <li><a class="slide-item" href="{{ route('financial_general_report_branch') }}">تقرير الأرباح والخسائر</a> </li>
 								@endcan
 
 								@can('admin_3')
-									<li><a class="slide-item" href="{{ route('financial_results_branch') }}">حساب الأرباح</a></li>
-                                    <li><a class="slide-item" href="{{ route('financial_payments_branch') }}">سندات الصرف</a> </a></li>
+									<li><a class="slide-item" href="{{ route('financial_results_branch') }}"> تقارير الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_distribution_branch') }}"> ارباح الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_results_branch') }}"> تقارير الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_distribution_branch') }}"> ارباح الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('payments_vouchers_branch') }}">أذونات الصرف</a></li>
+                                     <li><a class="slide-item" href="{{ route('financial_general_report_branch') }}">تقرير الأرباح والخسائر</a> </li>
 								@endcan
 
 								@can('superadmin')
-									{{-- <li><a class="slide-item" href="{{ route('admin.finantial.reservations-income') }}">حساب الأرباح</a></li> --}}
-                                    <li><a class="slide-item" href="{{ route('financial_results') }}">حساب الأرباح</a></li>
-									<li><a class="slide-item" href="{{ route('financial_payments') }}">سندات الصرف</a> </a></li>
+									{{-- <li><a class="slide-item" href="{{ route('admin.finantial.reservations-income') }}"> تقارير ح</a></li> --}}
+                                    <li><a class="slide-item" href="{{ route('financial_results') }}"> تقارير الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_distribution') }}"> ارباح الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_results') }}"> تقارير الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_services_distribution') }}"> ارباح الخدمات</a></li>
+									<li><a class="slide-item" href="{{ route('payments_vouchers') }}">أذونات الصرف</a></li>
+                                    <li><a class="slide-item" href="{{ route('financial_general_report') }}">تقرير الأرباح والخسائر</a> </li>
+
 								@endcan
 							</ul>
 						</li>
@@ -146,21 +182,24 @@
 
                     @can('clients_payments-list')
 						<li class="slide">
-							<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"/><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg><span class="side-menu__label">حسابات العملاء</span><i class="angle fe fe-chevron-down"></i></a>
+							<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"/><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg><span class="side-menu__label">تقارير العملاء </span><i class="angle fe fe-chevron-down"></i></a>
 							<ul class="slide-menu">
                                 @can('superadmin')
-                                     <li><a class="slide-item" href="{{ route('livewire.clients_reservations_payments') }}">سندات قبض الكشوفات</a></li>
-                                      <li><a class="slide-item" href="{{ route('livewire.clients_services_payments') }}">سندات قبض الخدمات</a></li>
+                                    <li><a class="slide-item" href="{{ route('livewire.clients_reservations_payments') }}">أذونات قبض الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('livewire.clients_services_payments') }}">أذونات قبض الخدمات</a></li>
                                 @endcan
 
                                 @can('reception_1')
-		                            <li><a class="slide-item" href="{{ route('livewire.clients_payments_branch') }}">سندات القبض</a></li>
+		                            <li><a class="slide-item" href="{{ route('livewire.clients_reservations_payments_branch') }}">أذونات قبض الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('livewire.clients_services_payments_branch') }}">أذونات قبض الخدمات</a></li>
                                 @endcan
                                 @can('reception_2')
-		                            <li><a class="slide-item" href="{{ route('livewire.clients_payments_branch') }}">سندات القبض</a></li>
+		                            <li><a class="slide-item" href="{{ route('livewire.clients_reservations_payments_branch') }}">أذونات قبض الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('livewire.clients_services_payments_branch') }}">أذونات قبض الخدمات</a></li>
                                 @endcan
                                 @can('reception_3')
-		                            <li><a class="slide-item" href="{{ route('livewire.clients_payments_branch') }}">سندات القبض</a></li>
+		                            <li><a class="slide-item" href="{{ route('livewire.clients_reservations_payments_branch') }}">أذونات قبض الكشوفات</a></li>
+                                    <li><a class="slide-item" href="{{ route('livewire.clients_services_payments_branch') }}">أذونات قبض الخدمات</a></li>
                                 @endcan
 							</ul>
 						</li>
@@ -171,9 +210,9 @@
 						<li class="slide">
 							<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"/><path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg><span class="side-menu__label"> المالية</span><i class="angle fe fe-chevron-down"></i></a>
 							<ul class="slide-menu">
-								<li><a class="slide-item" href="{{ route('admin.finantial-1.reservations-income') }}">حساب الأرباح</a></li>
+								<li><a class="slide-item" href="{{ route('admin.finantial-1.reservations-income') }}"> تقارير ح</a></li>
 
-								<li><a class="slide-item" href="{{ route('admin.payments-1.index') }}">سندات الصرف</a> </a></li>
+								<li><a class="slide-item" href="{{ route('admin.payments-1.index') }}">أذونات الصرف</a> </a></li>
 							</ul>
 						</li>
 
@@ -192,15 +231,28 @@
                     @endcan
                     @can('reservations-list')
 					<li class="slide">
-						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 12c0 4.08 3.06 7.44 7 7.93V4.07C7.05 4.56 4 7.92 4 12z" opacity=".3"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/></svg><span class="side-menu__label">الحجوزات</span><i class="angle fe fe-chevron-down"></i></a>
+						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 12c0 4.08 3.06 7.44 7 7.93V4.07C7.05 4.56 4 7.92 4 12z" opacity=".3"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/></svg><span class="side-menu__label">حجز كشف</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item" href="{{ route('admin.reservations.index') }}">قائمة الحجوزات</a></li>
                             @can('reservations-create')
-							<li><a class="slide-item" href="{{ route('admin.reservations.create')}}">إضافة حجز</a></li>
+							<li><a class="slide-item" href="{{ route('admin.reservations.create')}}">إضافة كشف</a></li>
+                            @endcan
+						</ul>
+					</li>
+
+					<li class="slide">
+						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M4 12c0 4.08 3.06 7.44 7 7.93V4.07C7.05 4.56 4 7.92 4 12z" opacity=".3"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/></svg><span class="side-menu__label">حجز خدمة</span><i class="angle fe fe-chevron-down"></i></a>
+						<ul class="slide-menu">
+							<li><a class="slide-item" href="{{ route('livewire.clients_services_payments') }}">قائمة الحجوزات</a></li>
+                            @can('reservations-create')
+							<li><a class="slide-item" href="{{ route('admin.services_bookings.create')}}">إضافة خدمة</a></li>
                             @endcan
 						</ul>
 					</li>
                     @endcan
+
+
+
 
 
 

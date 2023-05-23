@@ -8,7 +8,7 @@
 						<div class="card">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">قائمة سندات قبض الكشوفات لفرع {{ $reservation->branch->name_ar }}</h4>
+									<h4 class="card-title mg-b-0 text-danger my-3">قائمة أذونات قبض الكشوفات لفرع {{ auth()->user()->branch->name_ar }}</h4>
                                         <button class="btn btn-primary"><a class="x-small text-white" wire:click="exportClientServices" >تصدير إلي إكسيل</a></button>
 								</div>
 								{{-- <p class="tx-12 tx-gray-500 mb-2">Example of Valex Hoverable Rows Table.. <a href="">Learn more</a></p> --}}
@@ -23,7 +23,7 @@
                                         <div class="col">
                                             <label for="">بحث بالتخصص الرئيسي </label>
                                             <select wire:model="specialist_id" class="form-control" name="specialist_id" value="{{ old('specialist_id') }}" >
-                                                <option value="">-- إختار التخصص--</option>
+                                                <option value="">-- إختر التخصص--</option>
                                                 @foreach($specialists as $specialist)
                                                     <option value ="{{$specialist->id}}">{{$specialist->name_ar}}</option>
                                                 @endforeach
@@ -37,7 +37,7 @@
                                                 <label for="">بحث بالطبيب   </label>
                                                 
                                                 <select wire:model="doctor_id" class="form-control" name="doctor_id" value="{{ old("doctor_id") }}" >
-                                                    <option value="">-- إختار الطبيب--</option>
+                                                    <option value="">-- إختر الطبيب--</option>
                                                         @if (!is_null($branch_id) || !is_null($specialist_id))
                                                             @foreach($doctors as $doctor)
                                                             <option value ="{{$doctor->id}}">{{$doctor->name_ar}}</option>                          
@@ -99,7 +99,7 @@
                                                     <td>
                                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_payment{{ $payment->id }}" title="حذف السند"><i class="fa fa-trash"></i></button></td>
                                                         <!-- Delete Modal -->
-                                                        <form action="{{route('admin.clients_payments.destroy',$payment)}}" method="POST">
+                                                        <form action="{{route('admin.clients_reservations_payments.destroy',$payment)}}" method="POST">
                                                               
                                                             @method('delete')
                                                             @csrf
@@ -107,7 +107,7 @@
                                                                 <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند القبض من قائمة السندات</h5>
+                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند القبض من قائمة الأذونات</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
@@ -128,7 +128,7 @@
                                                         </form>
                                                     </td>
 													<td>
-														<a href="{{route('admin.clients_payments.print',$payment->id)}}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" title="طباعة السند"><i class="fa fa-print" aria-hidden="true"></i></a>
+														<a href="{{route('admin.clients_reservations_payments.print',$payment->id)}}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" title="طباعة السند"><i class="fa fa-print" aria-hidden="true"></i></a>
 													</td>
                                                 </tr>
                                             @endforeach

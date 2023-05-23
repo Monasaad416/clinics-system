@@ -61,7 +61,9 @@
 											<tr>
 												<th>#</th>
                                                 <th>رقم الحجز</th>
-												<th>الفرع</th>
+                                                @if(auth()->user()->roles_name == ["superadmin"])
+												    <th>الفرع</th>
+                                                @endif    
                                                 <th>العميل</th>
                                                 <th>العمر</th>
                                                 <th>الهاتف</th>
@@ -106,7 +108,9 @@
 													@endphp
                                                     <th scope="row">{{ $loop->iteration }}</th>
                                                     <td>{{ $reservation->number }}</td>
-                                                    <td>{{ $reservation->branch->name_ar }}</td>
+                                                    @if(auth()->user()->roles_name == ["superadmin"])
+                                                        <td>{{ $reservation->branch->name_ar }}</td>
+                                                    @endif      
 													<td>{{ $reservation->client->name }}</td>
 													<td>{{ Carbon\Carbon::parse($reservation->client->date_of_birth)->age}}سنة</td>
                                                     <td>{{ $reservation->client->phone }}</td>
@@ -168,7 +172,7 @@
 														</td> --}}
 
                                                         <td>
-														   <a href="{{ route('admin.payment_type.select',['reservation_id'=>$reservation->id]) }}" class="btn btn-success btn-sm" role="button" aria-pressed="true" title="المحاسبة المالية للعميل"><i class="fas fa-money-bill-wave"></i></a>
+														   <a href="{{ route('admin.clients_reservations_payments.create',$reservation->id)  }}" class="btn btn-success btn-sm" role="button" aria-pressed="true" title="المحاسبة المالية للعميل"><i class="fas fa-money-bill-wave"></i></a>
 														</td>
                                                 </tr>
                                             @endforeach

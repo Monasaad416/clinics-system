@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Exports\SalaryExport;
+use Excel;
 use App\Models\User;
 use App\Models\Branch;
 use App\Models\Doctor;
@@ -12,6 +12,9 @@ use App\Models\Specialist;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
+use App\Exports\SalaryExport;
+use App\Models\PaymentVoucher;
+use App\Exports\ReservationsExport;
 
 class Financial extends Component
 {
@@ -19,7 +22,7 @@ class Financial extends Component
     public $branch_id;
     public $specialist_id;
     public $doctor_id;
-    
+
     public $employee_id;
     public $from_date = "";
     public $to_date = "";
@@ -37,41 +40,15 @@ class Financial extends Component
         $insurance = 0;
         $net = 0;
 
-        if(auth()->user()->roles_name == ["superadmin"] ) {
-            
-            $reservations = Reservation::where( function($query) {
 
-                $branchesIds = Branch::pluck('id')->toArray();
-                $specialistsIds = Specialist::pluck('id')->toArray();
-                $doctorsIds = Doctor::pluck('id')->toArray();
-                if(!empty($this->from_date) && !empty($this->to_date)  ){
-                    $query->whereBetween('date', [$this->from_date,$this->to_date]);
 
-                    }
-                if(!empty($this->doctor_id) ){
-                    $query->where('doctor_id',$this->doctor_id);
-                }
-                if(!empty($this->branch_id) ){
-                    $query->where('branch_id',$this->branch_id);
-
-                }
-                if(!empty($this->specialist_id)){
-                    $query->where('specialist_id',$this->specialist_id);
-
-                }
-
-            })->where('status', 'completed')->paginate(20);
-
-        }
-        else{
-        
         $reservations = Reservation::where( function($query) {
 
             $branchesIds = Branch::pluck('id')->toArray();
             $specialistsIds = Specialist::pluck('id')->toArray();
             $doctorsIds = Doctor::pluck('id')->toArray();
             if(!empty($this->from_date) && !empty($this->to_date)  ){
-                 $query->whereBetween('date', [$this->from_date,$this->to_date]);
+                $query->whereBetween('date', [$this->from_date,$this->to_date]);
 
                 }
             if(!empty($this->doctor_id) ){
@@ -86,22 +63,23 @@ class Financial extends Component
 
             }
 
-        })->where('branch_id',auth()->user()->branch_id)->latest()->paginate(20);
-        }
+        })->where('status', 'completed')->paginate(20);
+
+
 
 
 
         $ServicesPrice = 0 ;
         $servicesInsurance  = 0;
-        foreach ($reservations as $reservation) {
-            $resServices = $reservation->services;
-            if($reservation->insurance_percentage > 0) {
-               foreach ( $resServices as $resService ) {
-               $ServicesPrice += $resService->price;
-               $servicesInsurance += $reservation->insurance_percentage /100 * $resService->price ;
-            }
-            }
-        }
+        // foreach ($reservations as $reservation) {
+        //     $resServices = $reservation->services;
+        //     if($reservation->insurance_percentage > 0) {
+        //        foreach ( $resServices as $resService ) {
+        //        $ServicesPrice += $resService->price;
+        //        $servicesInsurance += $reservation->insurance_percentage /100 * $resService->price ;
+        //     }
+        //     }
+        // }
 
 
         $fees = $reservations->sum('final_price');
@@ -112,9 +90,9 @@ class Financial extends Component
 
 
 
-    
 
-        $payments = Salary::where( function($query) {
+
+        $payments = PaymentVoucher::where( function($query) {
 
             // $branchesIds = Branch::pluck('id')->toArray();
             // $specialistsIds = Specialist::pluck('id')->toArray();
@@ -124,17 +102,17 @@ class Financial extends Component
 
             }
             if(!empty($this->doctor_id) ){
-                  $query->where('salariable_type','App\Models\Doctor')->where('salariable_id',$this->doctor_id);
+                  $query->where('doctor_id',$this->doctor_id);
             }
 
-              
+
             if(!empty($this->employee_id) ){
-                $query->where('salariable_type','App\Models\User')->where('salariable_id',$this->employee_id);
+                $query->where('user_id',$this->employee_id);
             }
-          
+
             if(!empty($this->specialist_id)){
                 $doctorsWithSpecialist = Doctor::where('specialist_id',$this->specialist_id)->pluck('id')->toArray();
-                $query->where('salariable_type','App\Models\Doctor')->whereIn('salariable_id',$doctorsWithSpecialist);
+                $query->whereIn('doctor_id',$doctorsWithSpecialist);
 
             }
 
@@ -157,7 +135,7 @@ class Financial extends Component
 
 
 
-    
+
     public function updatedBranchId($branch_id)
     {
         if (!is_null($branch_id)) {
@@ -175,6 +153,19 @@ class Financial extends Component
         }
     }
 
- 
+
+    public function reservations()
+    {
+        //return dd($this->from_date,$this->to_date,$this->branch_id,$this->sub_specialist_id,$this->specialist_id);
+        $from_date= $this->from_date;
+        $to_date = $this->to_date;
+        $doctor_id = $this->doctor_id;
+        $branch_id = $this->branch_id;
+        $specialist_id = $this->specialist_id;
+
+        return Excel::download(new ReservationsExport( $from_date,$to_date,$branch_id,$specialist_id,$doctor_id), 'reservations.xlsx');
+    }
+
+
 
 }

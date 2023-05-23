@@ -60,7 +60,7 @@
                             $branches = App\Models\Branch::pluck('name_ar','id');
                         @endphp
 
-                        @include('inc.errors')
+                        {{-- @include('inc.errors') --}}
 
                         {!! Form::model($client,[
                             'route' => ['admin.clients.update',$client->id],
@@ -71,28 +71,28 @@
 
                             <div class="card-body">
                                 <div class="form-group">
-                                    {!!Form::text('name', null,[
+                                    {!!Form::text('name', old('name',$client->name),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' إسم العميل'
                                     ])!!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!!Form::text('email', null,[
+                                    {!!Form::text('email', old('email',$client->email),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' البريد الإلكتروني'
                                     ])!!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!!Form::text('phone', null,[
+                                    {!!Form::text('phone', old('phone',$client->phone),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' رقم الهاتف '
                                     ])!!}
                                 </div>
 
                                 <div class="form-group">
-                                    {!!Form::text('how_know_us', null,[
+                                    {!!Form::text('how_know_us', old('how_know_us',$client->how_know_us),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' كيف تعرفت علينا ',
 
@@ -103,7 +103,7 @@
                                 {!!Form::hidden('id', $client->id)!!}
 
                                 <div class="form-group">
-                                    {!!Form::text('address', null,[
+                                    {!!Form::text('address', old('address',$client->address),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' العنوان',
 
@@ -111,14 +111,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    {!!Form::text('file_no', null,[
+                                    {!!Form::text('file_no', old('file_no',$client->file_no),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' رقم الملف',
 
                                     ])!!}
                                 </div>
                                 <div class="form-group">
-                                    {!!Form::date('date_of_birth', null,[
+                                    {!!Form::date('date_of_birth', old('date_of_birth',$client->date_of_birth),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' تاريخ ميلاد العميل',
 
@@ -127,9 +127,9 @@
 
                                 @if(Auth::user()->roles_name == ["superadmin"])
                                 <div class="form-group">
-                                    {!! Form::select('branch_id', $branches, null ,
+                                    {!! Form::select('branch_id', $branches, old('branch_id',$client->branch_id) ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار الفرع',
+                                        'placeholder' => 'إختر الفرع',
                                         ])
                                     !!}
                                 </div>

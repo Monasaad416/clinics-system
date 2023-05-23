@@ -46,8 +46,17 @@ class Branch extends Model
     }
 
 
+       public function servicesBookings()
+    {
+        return $this->hasMany('App\Models\ServiceBooking');
+    }
+
      public function salaries()
     {
         return $this->hasMany('App\Models\Salary');
     }
+
+
+
+    
 }

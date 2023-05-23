@@ -114,7 +114,19 @@
 						
 							</div>
 						</div>
+
+                        <div class="card card-dashboard-eight pb-2">
+							<h6 class="card-title">عدد الخدمات المقدمة الشهر السابق لفرع <span class ="text-danger">{{ $branch->name_ar }}</span></h6><span class="d-block mg-b-10 text-muted tx-12">تتبع الخدمات    </span>
+							<div class="list-group">
+								<div class="list-group-item border-top-0">
+									<i class=""></i>
+									<p>  </p><span>{{ $branch->servicesBookings->where('created_at',">=",  Carbon\Carbon::now()->firstOfMonth()->toDateTimeString())->count() }} خدمة </span>
+								</div>
+						
+							</div>
+						</div>
 					</div>
+
 						
 					@endforeach
 				

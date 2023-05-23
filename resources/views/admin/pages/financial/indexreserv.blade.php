@@ -62,7 +62,7 @@
                 <div class="card overflow-hidden sales-card bg-warning-gradient">
                     <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                         <div class="">
-                            <h6 class="mb-3 tx-12 text-white">سندات الصرف </h6>
+                            <h6 class="mb-3 tx-12 text-white">أذونات الصرف </h6>
                         </div>
                         <div class="pb-0 mt-0">
                             <div class="d-flex">
@@ -121,7 +121,7 @@
 											<div class="form-group">
 												<label for="">بحث بالفرع</label>
 												<select name="branch_id" class="form-control" id="branch_id" value="{{ old('branch_id') }}" >
-													<option value="">-- إختار الفرع--</option>
+													<option value="">-- إختر الفرع--</option>
 													@foreach($branches as $branch)
 														<option value ="{{$branch->id}}">{{$branch->name_ar}}</option>
 													@endforeach
@@ -131,7 +131,7 @@
                                             <div class="form-group">
 												<label for="">بحث بالتخصص الرئيسي </label>
 												<select name="specialist_id" class="form-control" id="specialist_id" value="{{ old('specialist_id') }}" >
-													<option value="">-- إختار التخصص--</option>
+													<option value="">-- إختر التخصص--</option>
 													@foreach($specialists as $specialist)
 														<option value ="{{$specialist->id}}">{{$specialist->name_ar}}</option>
 													@endforeach
@@ -142,7 +142,7 @@
                                             <div class="form-group">
 												<label for="">بحث بالطبيب إعتمادا<br> علي الفرع والتخصص  </label>
 												<select name="doctor_id" class="form-control" id="doctor_id" value="{{ old("doctor_id") }}" >
-													<option value="">-- إختار الطبيب--</option>
+													<option value="">-- إختر الطبيب--</option>
 											
 												</select>
 											</div>
@@ -358,7 +358,7 @@
                         success: function (data) {
                             console.log(data);
                             $('select[name="doctor_id"]').empty();
-                            $('select[name="doctor_id"]').append('<option value="selected disabled">إختار الطبيب </option>');
+                            $('select[name="doctor_id"]').append('<option value="selected disabled">إختر الطبيب </option>');
                             $.each(data, function (key, value) {
 
                                 $('select[name="doctor_id"]').append('<option value="' + key + '">' + value + '</option>');

@@ -56,7 +56,7 @@ class ReservationController extends Controller
 
     public function store(StoreReservationRequest $request)
     {
-        //return dd($request->all());
+        //return dd($request->sub_specialist_id);
         $client = Client::where('phone',$request->phone)->first();
         // return dd($client);
         $latesRes = Reservation::orderBy('created_at','DESC')->first();
@@ -106,7 +106,7 @@ class ReservationController extends Controller
                 'time' => $request->time,
                 'date' => $request->date,
                 'doctor_id' => $request->doctor_id,
-                // 'sub_specialist_id' => $request->sub_specialist_id,
+                'sub_specialist_id' => $request->sub_specialist_id ?? null ,
                 'specialist_id' => $request->specialist_id,
                 'status' => $request->status,
                 'type' => $request->type,
@@ -199,7 +199,7 @@ class ReservationController extends Controller
         } else{
 
             try{
-                $client = Client::where('phone',$request->phone)->orWhere('email',$request->email)->first();
+                $client = Client::where('phone',$request->phone)->first();
 
                 $insurancePercentage = $request->insurance_percentage ? $request->insurance_percentage : 0;
                 $doctor = Doctor::where('id',$request->doctor_id)->first();
@@ -213,7 +213,7 @@ class ReservationController extends Controller
                     'time' => $request->time,
                     'date' => $request->date,
                     'doctor_id' => $request->doctor_id,
-                    'sub_specialist_id' => $request->sub_specialist_id,
+                    'sub_specialist_id' => $request->sub_specialist_id ?? null ,
                     'specialist_id' => $request->specialist_id,
                     'status' => $request->status,
                     'type' => $request->type,
@@ -314,8 +314,8 @@ class ReservationController extends Controller
             abort(403);
         }
 
-        $subSpecialists = SubSpecialist::where('specialist_id', "=" , $reservation->doctor->specialist_id)->get();
-       //return dd($subSpecialists)
+        $subSpecialists = SubSpecialist::where('specialist_id', "=" , $reservation->specialist_id)->get();
+        //return dd($subSpecialists);
         return view('admin.pages.reservations.edit',compact('reservation','subSpecialists'));
     }
 

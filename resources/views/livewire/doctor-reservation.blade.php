@@ -77,13 +77,13 @@
                     
                                                     <tr>
                                                         <th class="border-bottom-0">إجمالي الكشوفات الفعلية  </th>
-                                                        <th class="border-bottom-0">{{ number_format($actualReservations)}} </th>
+                                                        <th class="border-bottom-0">{{ number_format($actualReservations,2)}} </th>
                                                     </tr>
                                 
 
                                                     <tr>
                                                         <th class="border-bottom-0">إجمالي المبالغ المستلمة   </th>
-                                                        <th class="border-bottom-0">{{ number_format($payments) }} </th>
+                                                        <th class="border-bottom-0">{{ number_format($payments,2) }} </th>
                                                     </tr>
                                     
 

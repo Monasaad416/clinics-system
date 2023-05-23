@@ -45,9 +45,9 @@ class ClientController extends Controller
 
              $latesClient = Client::orderBy('created_at','DESC')->first();
              if(!$latesClient){
-                $file_no = '#00000001';
+                $file_no = $request->branch_id.'#00000001';
              } else {
-                  $file_no = '#'.str_pad($latesClient->id + 1, 8, "0", STR_PAD_LEFT);
+                  $file_no = $request->branch_id.'#'.str_pad($latesClient->id + 1, 8, "0", STR_PAD_LEFT);
              }
                 $client = Client::create([
                 'name' => $request->name,

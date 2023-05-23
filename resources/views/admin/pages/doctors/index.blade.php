@@ -41,7 +41,7 @@
                                                 <th>الصورة الشخصية</th>
                                                 <th>التخصص الرئيسي </th>
                                                 <th>التخصصات الفرعية</th>
-												<th>الراتب </th>
+												{{-- <th>الراتب </th> --}}
                                                 {{-- <th>تاريخ الإلتحاق </th> --}}
                                                 @can('dashboard')
                                                 <th>الفرع</th>
@@ -100,7 +100,7 @@
                                                     @can('dashboard')
                                                         <td>{{$doctor->branch->name_ar}}</td>
                                                     @endcan
-                                                    <td>{{$doctor->fees}}</td>
+                                                    {{-- <td>{{$doctor->fees}}</td> --}}
                                                     @can('financila-list')
                                                         <td>
                                                             <a href="{{route('admin.doctors.show',$doctor->id)}}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" title=" الكشوفات الفعلية "><i class="fa fa-eye text-white" aria-hidden="true"></i></a>

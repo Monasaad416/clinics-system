@@ -19,23 +19,7 @@
             <div class="row row-sm">
                 <div class="col-xl-12">
                     <div class="card">
-                        <div class="card-body h-100">
-                            <div class="row row-sm ">
-                                <div class="text-right col">
-                                    <h4 class="product-title mb-1">رقم الحجز : {{ $reservation->number }}</h4>
-
-                                    <p class="product-description">اسم العميل: </p>
-
-									<h6 >هاتف العميل :<span class="text-danger">{{ $reservation->client->phone }}</span></h6>
-                                    <p class="product-description"> تاريخ الميلاد: {{ Carbon\Carbon::parse($reservation->client->date_of_birth)->format('d M ,Y')}}</p>
-                                    <p class="product-description"> العمر: {{ Carbon\Carbon::parse($reservation->client->date_of_birth)->age}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    		<div class="card-body">
+                       		<div class="card-body">
 								<div class="table-responsive">
 									<table class="table table-hover mb-0 text-md-nowrap">
 										<thead>
@@ -46,7 +30,7 @@
 											</tr>
 										</thead>
 										<tbody>
-                    
+
                                                 <tr>
                                                     <td> رقم الحجز</td>
                                                     <td>{{ $reservation->number }}</td>
@@ -64,12 +48,12 @@
                                                      <td>تاريخ الميلاد</td>
                                                     <td>{{ Carbon\Carbon::parse($reservation->client->date_of_birth)->format('d M ,Y')}}</td>
                                                 </tr>
-                                                    
+
 													<tr>
                                                          <td>العمر</td>
                                                         <td>{{ Carbon\Carbon::parse($reservation->client->date_of_birth)->age}}سنة</td></tr>
                                                     <tr>
-                            
+
 													<tr>
                                                         <td>إسم الطبيب</td>
                                                         <td>{{ $reservation->doctor->name_ar }}</td>
@@ -84,7 +68,7 @@
                                                             @if ($reservation->subSpecialist)
                                                                 {{ $reservation->subSpecialist->name_ar }}
                                                             @else
-                                                                <p>لا يوجد</p>    
+                                                                <p>لا يوجد</p>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -107,7 +91,7 @@
                                                         <td>يوم الحجز</td>
                                                         <td>{{ $reservation->date}}</td>
                                                     </tr>
-                                        
+
                                                     @php
 														$status = $reservation->status;
 														if($status == 'pending') {
@@ -138,7 +122,7 @@
                                                     </tr>
                                                              <tr>
                                                         <td>الشركة التي تم الحجز بواسطتها </td>
-                                                        @if($reservation->services)
+                                                        @if($reservation->company_id)
                                                         <td>
                                                             {{ $reservation->company->name }}
                                                         </td>
@@ -163,7 +147,7 @@
                                                             <td>لايوجد</td>
                                                         @endif
                                                     </tr>
-                            
+
                                                     <tr>
                                                         <td>إجمالي الكشف </td>
                                                         <td>{{ $reservation->final_price }}</td>
@@ -172,29 +156,15 @@
                                                         <td>الموعد المقترح من العميل(إن وجد)</td>
                                                         <td>{{ $reservation->appointment_notes }}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>طباعة الفاتورة</td>	
-                                                        <td>
-														    <a href="{{route('admin.reservations.print',$reservation->id)}}" class="btn btn-secondary btn-sm" role="button" aria-pressed="true" title="طباعة فاتورة للعميل"><i class="fa fa-print" aria-hidden="true"></i></a>
-														</td>
-                                                    </tr>
-
-
-	
-											
-
-												
-				
-
-
-                          
-                          
-
 
 										</tbody>
 									</table>
 								</div>
 							</div>
+                    </div>
+
+
+                    
                 </div>
             </div>
             <!-- /row -->

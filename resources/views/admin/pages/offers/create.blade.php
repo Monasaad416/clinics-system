@@ -132,17 +132,17 @@
                                 <div class="col-md-6">
                                     @if(Auth::user()->roles_name == ["superadmin"])
                                         <div class="form-group">
-                                            {!!Form::label('name', 'إختار الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
+                                            {!!Form::label('name', 'إختر الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
                                             {!! Form::select('branch_id', $branches, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => 'إختار الفرع',
+                                                'placeholder' => 'إختر الفرع',
                                                 ])
                                             !!}
                                         </div>
                                     @else
                                     {{-- {{ dd(Auth::user()->branch->id)}} --}}
                                         <div class="form-group">
-                                               {!!Form::label('name', 'إختار الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
+                                               {!!Form::label('name', 'إختر الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
                                             <select name='branch_id' class="form-control">
                                                 <option value="{{(Auth::user()->branch->id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
                                             </select>

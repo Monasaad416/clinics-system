@@ -56,14 +56,15 @@
                             $specialists = App\Models\Specialist::all();
 
                             $doctorsIds = DB::table("doctor_sub_specialist")->where("sub_specialist_id",$reservation->sub_specialist_id)->pluck('doctor_id');
-                            $doctors = $doctorsIds->count() > 0 ? 
+                            $doctors = $doctorsIds->count() != 0 ?
                             App\Models\Doctor::whereIn('id',$doctorsIds)->get() :
                             App\Models\Doctor::where('branch_id',$reservation->branch_id)
                             ->where('specialist_id',$reservation->specialist_id)->get() ;
                             $companies = App\Models\Company::pluck('name','id')
-            
+
 
                         @endphp
+
 
                         @include('inc.errors')
                         {!! Form::model($reservation,[
@@ -79,17 +80,18 @@
                                 {!! Form::label('name','الفرع ')!!} <span class="text-danger font-weight-bolder">*</span>
                                 @if(Auth::user()->roles_name == ["superadmin"])
                                     <div class="form-group">
-                                        {!! Form::select('branch_id', $branches, null ,
+                                        {!! Form::select('branch_id', $branches, $reservation->branch_id ,
                                             ['class' => 'form-control mt-1 mb-3',
-                                            'placeholder' => 'إختار الفرع',
+                                            'placeholder' => 'إختر الفرع',
+                                            'id' => 'branch_id'
                                             ])
                                         !!}
                                     </div>
                                 @else
                                 {{-- {{ dd(Auth::user()->branch->id)}} --}}
                                     <div class="form-group">
-                                        <select name='branch_id' class="form-control">
-                                            <option value="{{(Auth::user()->branch->id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
+                                        <select name='branch_id' class="form-control" id="branch_id">
+                                            <option value="{{(Auth::user()->branch_id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
                                         </select>
                                     </div>
                                 @endif
@@ -104,7 +106,7 @@
                             <div class="col-md-3">
                                  {!! Form::label('name','التخصص الرئيسي ')!!} <span class="text-danger font-weight-bolder">*</span>
                                  <select class="form-control mt-1 mb-3" name="specialist_id">
-                                    <option value="">--إختار التخصص الرئيسي--</option>
+                                    <option value="">--إختر التخصص الرئيسي--</option>
                                     @foreach($specialists as $specialist)
                                         <option value="{{ $specialist->id }}" {{ $reservation->doctor->specialist_id  == $specialist->id ? 'selected' : ''}}>{{ $specialist->name_ar }}</option>
                                     @endforeach
@@ -118,10 +120,10 @@
 
                                <div class="col-md-3">
                                  {!! Form::label('name','التخصص الفرعي ')!!}
-                                 <select class="form-control mt-1 mb-3 js-multiple" name="sub_specialist_id" multiple>
-                                    <option value="">--إختار التخصص الفرعي--</option>
-                                    @foreach($subSpecialists as $sub_specialist)
-                                        <option value="{{ $sub_specialist->id }}" {{ $reservation->sub_specialist_id  == $sub_specialist->id ? 'selected' : ''}}>{{ $sub_specialist->name_ar }}</option>
+                                 <select class="form-control mt-1 mb-3" name="sub_specialist_id" >
+                                    <option value="0">--إختر التخصص الفرعي--</option>
+                                    @foreach($subSpecialists as $subSpecialist)
+                                        <option value="{{ $subSpecialist->id }}" {{ $reservation->sub_specialist_id  === $subSpecialist->id ? 'selected' : '' }}>{{ $subSpecialist->name_ar }}</option>
                                     @endforeach
                                  </select>
 
@@ -132,9 +134,9 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('name','إختار الطبيب')!!} <span class="text-danger font-weight-bolder">*</span>
+                                    {!! Form::label('name','إختر الطبيب')!!} <span class="text-danger font-weight-bolder">*</span>
                                     <select class="form-control mt-1 mb-3 " name="doctor_id" >
-                                    <option value="">--إختار الطبيب --</option>
+                                    <option value="">--إختر الطبيب --</option>
                                     @foreach($doctors as $doctor)
                                         <option value="{{ $doctor->id }}" {{ $reservation->doctor_id == $doctor->id ? 'selected' : ''}}>{{ $doctor->name_ar }}</option>
                                     @endforeach
@@ -150,7 +152,7 @@
 
 
                         <div class="row">
-      
+
 
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -239,7 +241,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!!Form::label('name', ' إسم شركة التأمين')!!} 
+                                        {!!Form::label('name', ' إسم شركة التأمين')!!}
                                         {!!Form::text('insurance', null,[
                                             'class' => 'form-control  mt-1 mb-3',
                                             'placeholder' => 'إسم شركة التأمين    '
@@ -253,26 +255,26 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                    {!!Form::label('name', ' % النسبة المئوية لتحمل التأمين بدون ')!!} 
+                                    {!!Form::label('name', ' % النسبة المئوية لتحمل التأمين بدون ')!!}
                                         {!!Form::number('insurance_percentage', null,[
                                             'class' => 'form-control  mt-1 mb-3',
                                             'placeholder' => '% النسبة المئوية لتحمل التأمين بدون ',
                                              'step'=>'any',
                                         ])!!}
-                                    </div>      
+                                    </div>
                                 </div>
                                 @error('insurance_percentage')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                    {!!Form::label('name', ' خصم التأمين')!!} 
+                                    {!!Form::label('name', ' خصم التأمين')!!}
                                         {!!Form::number('insurance_discount', null,[
                                             'class' => 'form-control  mt-1 mb-3',
                                             'placeholder' => ' خصم التأمين  ',
                                              'step'=>'any',
                                         ])!!}
-                                    </div> 
+                                    </div>
                                 </div>
 
                                 @error('insurance_discount')
@@ -281,14 +283,14 @@
                             </div>
 
 
-                            
+
                                 <div class="row">
                                    <div class="col-md-4">
                                         <div class="form-group">
                                             {!!Form::label('name', 'الشركة التي تم الحجز بواسطتها')!!}
                                             {!! Form::select('company_id', $companies, null ,
                                             ['class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'إختار الشركة ',
+                                            'placeholder' => 'إختر الشركة ',
                                             ])
                                             !!}
                                         </div>
@@ -296,7 +298,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            {!!Form::label('name', 'ملاحظات')!!} 
+                                            {!!Form::label('name', 'ملاحظات')!!}
                                             {!!Form::text('notes', null,[
                                                 'class' => 'form-control  mt-1 mb-3',
                                                 'placeholder' => 'ملاحظات'
@@ -306,10 +308,10 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            {!! Form::label('name','إختار طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
+                                            {!! Form::label('name','إختر طريقة الدفع')!!} <span class="text-danger font-weight-bolder">*</span>
                                             {!! Form::select('payment_method_id', $pluck, null ,
                                             ['class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'إختار طريقة الدفع',
+                                            'placeholder' => 'إختر طريقة الدفع',
                                             ])
                                             !!}
                                         </div>
@@ -317,7 +319,7 @@
                             </div>
 
                             <input type="hidden" name="id" value="{{ $reservation->id }}">
-                            
+
                             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                                 {!!Form::submit('تحديث الحجز',[
                                     'class' =>'btn btn-secondary btn-flat'
@@ -335,18 +337,15 @@
 @section('js')
 
 
-{{-- select doctor by specialist and branch --}}
+
+{{-- select doctore by specialist and branch --}}
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
         $('select[name="specialist_id"]').on('change', function () {
             var specialist_id = $(this).val();
             var branch_id = $("#branch_id").val();
-            console.log("jjjjjjj");
-            console.log(branch_id);
-
 
             if (specialist_id) {
-                console.log(specialist_id);
                     $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -357,9 +356,9 @@
                     type: "GET",
                     dataType:"json",
                     success: function (data) {
-                        console.log(data);
+
                         $('select[name="doctor_id"]').empty();
-                        $('select[name="doctor_id"]').append('<option value="selected disabled">إختار الطبيب </option>');
+                        $('select[name="doctor_id"]').append('<option value="disabled">إختر الطبيب </option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="doctor_id"]').append('<option value="' + key + '">' + value + '</option>');
@@ -371,15 +370,16 @@
                 console.log('AJAX load did not work');
             }
         });
+
+
     });
 </script>
-
-{{-- select sub specialists by specialist --}}
+{{-- select subspecialist by specialist --}}
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
         $('select[name="specialist_id"]').on('change', function () {
             var specialist_id = $(this).val();
-            //console.log(specialist_id);
+
             if (specialist_id) {
                     $.ajaxSetup({
                     headers: {
@@ -387,12 +387,12 @@
                     }
                 });
                 $.ajax({
-                    url: "{{ URL::to("/front/getSubSpecialistsBySpecialist") }}/" + specialist_id,
+                    url: "{{ URL::to("/admin/getSubSpecialistsBySpecialist") }}/" + specialist_id,
                     type: "GET",
                     dataType:"json",
                     success: function (data) {
                         $('select[name="sub_specialist_id"]').empty();
-                        $('select[name="sub_specialist_id"]').append('<option value="selected disabled">إختار التخصص الفرعي</option>');
+                        $('select[name="sub_specialist_id"]').append('<option value="0" selected disabled>إختر التخصص الفرعي</option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="sub_specialist_id"]').append('<option value="' + key + '">' + value + '</option>');
@@ -404,31 +404,34 @@
                 console.log('AJAX load did not work');
             }
         });
+
     });
 </script>
 
 
-{{-- select doctor by sub specialist --}}
+{{-- select doctore by subspecialist --}}
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
         $('select[name="sub_specialist_id"]').on('change', function () {
             var sub_specialist_id = $(this).val();
             var branch_id = $("#branch_id").val();
-
+            console.log(sub_specialist_id,branch_id);
 
             if (sub_specialist_id) {
+
                     $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
                 $.ajax({
-                    url: "{{ URL::to("/front/getDoctorsBySpecialistAndBranch") }}/" + sub_specialist_id + "/" + branch_id,
+                    url: "{{ URL::to("/admin/getDoctorsBySubSpecialistAndBranch") }}/" + sub_specialist_id + "/" + branch_id,
                     type: "GET",
                     dataType:"json",
                     success: function (data) {
+
                         $('select[name="doctor_id"]').empty();
-                        $('select[name="doctor_id"]').append('<option value="selected disabled">إختار الطبيب </option>');
+                        $('select[name="doctor_id"]').append('<option value="0" selected >إختر الطبيب </option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="doctor_id"]').append('<option value="' + key + '">' + value + '</option>');
@@ -440,88 +443,17 @@
                 console.log('AJAX load did not work');
             }
         });
+
     });
 </script>
 
 
 
-{{-- select days by sub doctor --}}
-<script>
-  $(document).ready(function () {
-        $('select[name="doctor_id"]').on('change', function () {
-            var doctorId = $(this).val();
-            console.log(doctorId);
 
-
-
-            if (doctorId ) {
-                    $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ URL::to("/admin/getDaysByDoctor") }}/" + doctorId ,
-                    type: "GET",
-                    dataType:"json",
-                    success: function (data) {
-                      console.log(data)
-
-                        $('select[name="day_id"]').empty();
-                        $('select[name="day_id"]').append('<option value="selected disabled">إختار الموعد </option>');
-                          $.each(data, function (key, value) {
-
-                            $('select[name="day_id"]').append('<option value="' + key + '">' + value[days] + '</option>');
-                        });
-                    },
-
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-    });
-</script>
-
-
-{{-- select services by sub branch --}}
-<script>
-  $(document).ready(function () {
-        $('select[name="branch_id"]').on('change', function () {
-            var branchId = $(this).val();
-            console.log(branchId);
-
-            if (branchId ) {
-                    $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ URL::to("/admin/getServicesByBranch") }}/" + branchId ,
-                    type: "GET",
-                    dataType:"json",
-                    success: function (data) {
-                      console.log(data)
-
-                        $('select[name="service_ids[]"]').empty();
-                        $('select[name="service_ids[]"]').append('<option value="selected disabled">إختار الخدمة الإضافية </option>');
-                          $.each(data, function (key, value) {
-
-                            $('select[name="service_ids[]"]').append('<option value="' + key + '">' + value+ '</option>');
-                        });
-                    },
-
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-    });
-</script>
 <script>
     $(document).ready(function() {
     $('.js-multiple').select2();
 });
 </script>
+
 @endsection

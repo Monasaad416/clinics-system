@@ -64,7 +64,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                  {!!Form::label('name', ' إسم العميل')!!}
-                                    {!!Form::text('name', null,[
+                                    {!!Form::text('name', old('name'),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' إسم العميل'
                                     ])!!}
@@ -72,7 +72,7 @@
 
                                 <div class="form-group">
                                     {!!Form::label('name', ' البريد الإلكتروني ')!!}
-                                    {!!Form::text('email', null,[
+                                    {!!Form::text('email', old('email'),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' البريد الإلكتروني'
                                     ])!!}
@@ -80,7 +80,7 @@
 
                                 <div class="form-group">
                                     {!!Form::label('name', ' رقم الهاتف ')!!}
-                                    {!!Form::text('phone', null,[
+                                    {!!Form::text('phone', old('phone'),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' رقم الهاتف '
                                     ])!!}
@@ -95,19 +95,19 @@
                                 </div> --}}
 
 
+                       
                                 <div class="form-group">
                                     {!!Form::label('name', 'كيف تعرفت علينا')!!}
-                                    <br>
-
-                                    {!!Form::radio('how_know_us', '1')!!} FaceBook <br>
-                                    {!!Form::radio('how_know_us', '2')!!} Instagram <br>
-                                    {!!Form::radio('how_know_us', '3')!!} Twitter <br>
-                                    {!!Form::radio('how_know_us', '4')!!} اخري
+                                        {!!Form::text('how_know_us', old('how_know_us'),[
+                                            'class' => 'form-control  mt-1 mb-3',
+                                            'placeholder' => ' كيف تعرفت علينا ',
+                                    ])!!}
                                 </div>
+                      
 
                                 <div class="form-group">
                                     {!!Form::label('name', 'العنوان')!!}
-                                    {!!Form::text('address', null,[
+                                    {!!Form::text('address', old('address'),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' العنوان',
 
@@ -117,7 +117,7 @@
                 
                                 <div class="form-group">
                                     {!!Form::label('name', 'تاريخ الميلاد')!!}
-                                    {!!Form::date('date_of_birth', null,[
+                                    {!!Form::date('date_of_birth', old('date_of_birth'),[
                                         'class' => 'form-control  mt-1 mb-3',
                                         'placeholder' => ' تاريخ ميلاد العميل',
 
@@ -128,9 +128,9 @@
                                 @if(Auth::user()->roles_name == ["superadmin"])
                                 <div class="form-group">
                                     {!!Form::label('name', 'الفرع')!!}
-                                    {!! Form::select('branch_id', $branches, null ,
+                                    {!! Form::select('branch_id', $branches, old('branch_id') ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار الفرع',
+                                        'placeholder' => 'إختر الفرع',
                                         ])
                                     !!}
                                 </div>

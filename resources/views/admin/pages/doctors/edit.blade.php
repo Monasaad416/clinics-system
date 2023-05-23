@@ -141,7 +141,7 @@
                                         <div class="form-group">
                                             {!! Form::select('doctor_title_id', $doctorTitles, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => ' إختار المسمي الوظيفي ',
+                                                'placeholder' => ' إختر المسمي الوظيفي ',
                                                 ])
                                             !!}
                                         </div>
@@ -151,7 +151,7 @@
                                         <div class="form-group">
                                             {!! Form::select('professional_title_id', $professionalTitles, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => ' إختار اللقب المهني ',
+                                                'placeholder' => ' إختر اللقب المهني ',
                                                 ])
                                             !!}
                                         </div>
@@ -165,16 +165,16 @@
                                         <div class="form-group">
                                         {!! Form::select('specialist_id', $specialists, null ,
                                             ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => ' إختار التخصص الرئيسي',
+                                                'placeholder' => ' إختر التخصص الرئيسي',
                                             ])
                                         !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>إختار التخصص الفرعي</label>
+                                            <label>إختر التخصص الفرعي</label>
                                             <select style="border-color: gray" class="js-example-basic-multiple form-control" name="sub_specialist_ids[]" multiple="multiple">
-                                            <option value="">إختارالتخصص الفرعي  </option>
+                                            <option value="">إخترالتخصص الفرعي  </option>
                                                 @php
                                                     $doctorSSpecialistsIds = DB::table('doctor_sub_specialist')->where('doctor_id', $doctor->id)->pluck('sub_specialist_id')->toArray();
                                                 @endphp
@@ -227,7 +227,7 @@
                                             <div class="form-group">
                                                 {!! Form::select('branch_id', $branches, null ,
                                                     ['class' => 'form-control  mt-1 mb-3',
-                                                    'placeholder' => 'إختار الفرع',
+                                                    'placeholder' => 'إختر الفرع',
                                                     ])
                                                 !!}
                                             </div>
@@ -265,7 +265,7 @@
                             </div>
 
                             <div class="form-group">
-                                <option>إختار الأيام المتاحة للعمل</option>
+                                <option>إختر الأيام المتاحة للعمل</option>
                                     @foreach ( App\Models\Day::all() as $day)
 
                                         @if(in_array($day->id, $daysIds))
@@ -342,7 +342,7 @@
                                     <div class="form-group">
                                         <label for="">الحجز بأولوية الحضور</label>
                                         <select name='first_come' class ='form-control  mt-1 mb-3'>
-                                            <option value="0" >--إختار--</option>
+                                            <option value="0" >--إختر--</option>
                                             <option value="yes" {{ $doctor->first_come =='yes' ? 'selected':''}}>نعم</option>
                                             <option value="no" {{ $doctor->first_come =='no' ? 'selected':''}}>لا</option>
                                         </select>
@@ -353,7 +353,7 @@
                                     <div class="form-group">
                                         <label for="">توقف الحجز بعد أول كشف  </label>
                                         <select name='stop_reservations' class ='form-control  mt-1 mb-3'>
-                                            <option value="0" >--إختار--</option>
+                                            <option value="0" >--إختر--</option>
                                             <option value="yes" {{ $doctor->stop_reservations =='yes' ? 'selected':''}}>نعم</option>
                                             <option value="no" {{ $doctor->stop_reservations =='yes' ? 'selected':''}}>لا</option>
                                         </select>
@@ -402,7 +402,7 @@
                     dataType:"json",
                     success: function (data) {
                         $('select[name="sub_specialist_ids[]"]').empty();
-                        $('select[name="sub_specialist_ids[]"]').append('<option value="selected disabled">إختار التخصص الفرعي</option>');
+                        $('select[name="sub_specialist_ids[]"]').append('<option value="selected disabled">إختر التخصص الفرعي</option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="sub_specialist_ids[]"]').append('<option value="' + key + '">' + value + '</option>');
@@ -414,8 +414,39 @@
                 console.log('AJAX load did not work');
             }
         });
+
+
+        var specialist_id = $('select[name="specialist_id"]').val();
+
+        if (specialist_id) {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ URL::to("/admin/getSubSpecialistsBySpecialist") }}/" + specialist_id,
+                type: "GET",
+                dataType:"json",
+                success: function (data) {
+                    $('select[name="sub_specialist_ids[]"]').empty();
+                    $('select[name="sub_specialist_ids[]"]').append('<option value="selected disabled">إختر التخصص الفرعي</option>');
+                    $.each(data, function (key, value) {
+
+                        $('select[name="sub_specialist_ids[]"]').append('<option value="' + key + '">' + value + '</option>');
+                    });
+                },
+
+            });
+        } else {
+            console.log('AJAX load did not work');
+        }
+
+
+
+
     });
-    </script>
+</script>
 <script>
 
 

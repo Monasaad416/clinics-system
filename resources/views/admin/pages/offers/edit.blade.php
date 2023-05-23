@@ -159,7 +159,7 @@
                                         <div class="form-group">
                                             {!! Form::select('branch_id', $branches, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => 'إختار الفرع',
+                                                'placeholder' => 'إختر الفرع',
                                                 ])
                                             !!}
                                         </div>

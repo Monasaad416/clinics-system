@@ -3,7 +3,7 @@
 
         <div class="form-group">
             <select wire:model="branch_id" class ="form-control mt-1 mb-3">
-                 <option value="">إختار الفرع  </option>
+                 <option value="">إختر الفرع  </option>
                 @foreach ($branches as $branch )
                     <option value="{{ $branch->id }}">{{ $branch->name_ar }}</option>
                 @endforeach
@@ -37,7 +37,7 @@
 
     {{-- <div class="form-group">
             <select wire:model ="days" class ="form-control  mt-1 mb-3" multiple>
-                <option value="">إختار أيام العمل  </option>
+                <option value="">إختر أيام العمل  </option>
              
                     <option value="1">السبت</option>
                     <option value="2">الاحد</option>

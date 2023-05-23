@@ -6,7 +6,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">سندات الصرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">
+							<h4 class="content-title mb-0 my-auto">أذونات الصرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">
 						</div>
 					</div>
 					{{-- <div class="d-flex my-xl-auto right-content">
@@ -47,9 +47,9 @@
 						<div class="card">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">قائمة سندات الصرف</h4>
+									<h4 class="card-title mg-b-0">قائمة أذونات الصرف</h4>
                                         <button class="btn btn-primary"><a class="x-small text-white" href="{{route("admin.payments.create")}}">إضافة سند صرف</a></button>
-                                        <button class="btn btn-primary"><a class="x-small text-white" href="{{route("financial_payments.excel")}}">تصدير إلي إكسيل</a></button>
+                                        <button class="btn btn-primary"><a class="x-small text-white" href="{{route("payments_vouchers.excel")}}">تصدير إلي إكسيل</a></button>
 								</div>
 								{{-- <p class="tx-12 tx-gray-500 mb-2">Example of Valex Hoverable Rows Table.. <a href="">Learn more</a></p> --}}
 							</div>
@@ -67,7 +67,7 @@
                                             <div class="col">
                                                 <label for="">بحث بالفرع</label>
                                                 <select name="branch_id" class="form-control" id="branch_id" value="{{ old('branch_id') }}">
-                                                    <option value="">-- إختار الفرع--</option>
+                                                    <option value="">-- إختر الفرع--</option>
                                                     @foreach($branches as $branch)
                                                         <option value ="{{$branch->id}}">{{$branch->name_ar}}</option>
                                                     @endforeach
@@ -77,7 +77,7 @@
                                             <div class="col">
                                                 <label for="">بحث بالتخصص الرئيسي </label>
                                                 <select name="specialist_id" class="form-control" id="specialist_id" value="{{ old('specialist_id') }}">
-                                                    <option value="">-- إختار التخصص--</option>
+                                                    <option value="">-- إختر التخصص--</option>
                                                     @foreach($specialists as $specialist)
                                                         <option value ="{{$specialist->id}}">{{$specialist->name_ar}}</option>
                                                     @endforeach
@@ -88,7 +88,7 @@
                                             <div class="col">
                                                 <label for="">بحث بالطبيب   </label>
                                                 <select name="doctor_id" class="form-control" id="doctor_id" value="{{ old("doctor_id") }}">
-                                                    <option value="">-- إختار الطبيب--</option>
+                                                    <option value="">-- إختر الطبيب--</option>
 
                                                 </select>
                                             </div>
@@ -98,7 +98,7 @@
                                             <div class="col">
                                                 <label for="">بحث بالموظف </label>
                                                 <select name="employee_id" class="form-control" id="employee_id" value="{{ old("employee_id") }}">
-                                                    <option value="">-- إختار الموظف--</option>
+                                                    <option value="">-- إختر الموظف--</option>
                                                         @php
                                                             $employees = App\Models\User::all();
                                                         @endphp
@@ -184,7 +184,7 @@
                                                                 <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند الصرف من قائمة السندات</h5>
+                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند الصرف من قائمة الأذونات</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
@@ -264,7 +264,7 @@
                         success: function (data) {
                             console.log(data);
                             $('select[name="doctor_id"]').empty();
-                            $('select[name="doctor_id"]').append('<option value="selected disabled">إختار الطبيب </option>');
+                            $('select[name="doctor_id"]').append('<option value="selected disabled">إختر الطبيب </option>');
                             $.each(data, function (key, value) {
 
                                 $('select[name="doctor_id"]').append('<option value="' + key + '">' + value + '</option>');

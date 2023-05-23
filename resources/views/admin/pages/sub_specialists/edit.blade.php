@@ -90,7 +90,7 @@
                                     {!! Form::select('specialist_id', $specialist, null ,
                                     [
                                     'class' => 'form-control  mt-1 mb-3',
-                                    'placeholder' => 'إختار التخصص الرئيسي',
+                                    'placeholder' => 'إختر التخصص الرئيسي',
                                     ])
                                     !!}
                                 </div>

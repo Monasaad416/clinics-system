@@ -106,7 +106,7 @@
                                         <div class="form-group">
                                             {!! Form::select('specialist_id', $specialists, null ,
                                                 ['class' => 'form-control  mt-1 mb-3',
-                                                'placeholder' => 'إختار التخصص ',
+                                                'placeholder' => 'إختر التخصص ',
                                                 ])
                                             !!}
                                         </div>
@@ -129,7 +129,7 @@
                                             <div class="form-group">
                                                 {!! Form::select('specialist_id', $specialists, null ,
                                                     ['class' => 'form-control  mt-1 mb-3',
-                                                    'placeholder' => 'إختار الفرع',
+                                                    'placeholder' => 'إختر الفرع',
                                                     ])
                                                 !!}
                                             </div>

@@ -16,7 +16,7 @@ class Salary extends Model
         return $this->morphTo();
     }
 
-      public function branch()
+    public function branch()
     {
         return $this->belongsTo('App\Models\Branch');
     }

@@ -6,7 +6,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">سندات الصرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">
+							<h4 class="content-title mb-0 my-auto">أذونات الصرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">
 						</div>
 					</div>
 					{{-- <div class="d-flex my-xl-auto right-content">
@@ -47,9 +47,9 @@
 						<div class="card">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">قائمة سندات الصرف</h4>
+									<h4 class="card-title mg-b-0">قائمة أذونات الصرف</h4>
                                         <button class="btn btn-primary"><a class="x-small text-white" href="{{route("admin.payments.create")}}">إضافة سند صرف</a></button>
-                                        <button class="btn btn-primary"><a class="x-small text-white" href="{{route("financial_payments.excel")}}">تصدير إلي إكسيل</a></button>
+                                        <button class="btn btn-primary"><a class="x-small text-white" href="{{route("payments_vouchers.excel")}}">تصدير إلي إكسيل</a></button>
 								</div>
 								{{-- <p class="tx-12 tx-gray-500 mb-2">Example of Valex Hoverable Rows Table.. <a href="">Learn more</a></p> --}}
 							</div>
@@ -184,7 +184,7 @@
                                                                 <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند الصرف من قائمة السندات</h5>
+                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند الصرف من قائمة الأذونات</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>

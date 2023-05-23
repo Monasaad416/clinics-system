@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Http\Livewire;
+
+use App\Models\User;
+use App\Models\Branch;
+use App\Models\Doctor;
+use Livewire\Component;
+use App\Models\Specialist;
+use App\Models\ClinicProfit;
+use App\Models\DoctorProfit;
+use App\Models\CompanyProfit;
+use App\Models\EmployeeProfit;
+use App\Models\PaymentVoucher;
+use App\Models\ServiceBooking;
+
+class FinancialServiceDistributionBranch extends Component
+{
+    // use WithPagination;
+    public $branch_id;
+    public $specialist_id;
+    public $doctor_id;
+
+    public $employee_id;
+    public $from_date = "";
+    public $to_date = "";
+    public $doctors;
+    public $employees;
+
+
+    public function render()
+    {
+
+        $branches = Branch::all();
+        $specialists = Specialist::all();
+        $doctors = Doctor::all();
+        $fees = 0;
+        $insurance = 0;
+        $net = 0;
+
+
+
+        $serviceBookings = ServiceBooking::where( function($query) {
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->doctor_id) ){
+                $query->where('doctor_id',$this->doctor_id);
+            }
+            if(!empty($this->specialist_id)){
+                $query->where('specialist_id',$this->specialist_id);
+            }
+
+
+            if(!empty($this->employee_id)){
+                $query->where('user_id',$this->employee_id);
+            }
+        })->where('branch_id',auth()->user()->branch_id)->paginate(20);
+
+        $doctorsProfits = DoctorProfit::where( function($query) {
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->doctor_id) ){
+                $query->where('doctor_id',$this->doctor_id);
+            }
+
+        })->where('branch_id',auth()->user()->branch_id)->where('notes','ارباح خدمة')->sum('amount');
+
+
+        $employeesProfits = EmployeeProfit::where( function($query) {
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->employee_id) ){
+                $query->where('user_id',$this->employee_id);
+            }
+        })->where('branch_id',auth()->user()->branch_id)->where('notes','ارباح خدمة')->sum('amount');
+
+
+        $companiesProfits = CompanyProfit::where( function($query) {
+            $branchesIds = Branch::pluck('id')->toArray();
+            $specialistsIds = Specialist::pluck('id')->toArray();
+            $doctorsIds = Doctor::pluck('id')->toArray();
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+
+                }
+            if(!empty($this->company_id) ){
+                $query->where('company_id',$this->company_id);
+            }
+
+        })->where('branch_id',auth()->user()->branch_id)->where('notes','ارباح خدمة')->sum('amount');
+
+        $clinicsProfits = ClinicProfit::where( function($query) {
+            $branchesIds = Branch::pluck('id')->toArray();
+            $specialistsIds = Specialist::pluck('id')->toArray();
+            $doctorsIds = Doctor::pluck('id')->toArray();
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->branch_id) ){
+                $query->where('branch_id',$this->branch_id);
+            }
+        })->where('branch_id',auth()->user()->branch_id)->where('notes','ارباح خدمة')->sum('amount');
+
+
+        $doctorsPayments = PaymentVoucher::where( function($query) {
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->doctor_id) ){
+                $query->where('doctor_id',$this->doctor_id);
+            }
+        })->whereNotNull('doctor_id')->sum('amount');
+
+
+        $employeesPayments = PaymentVoucher::where( function($query) {
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->employee_id) ){
+                $query->where('user_id',$this->employee_id);
+            }
+        })->whereNotNull('user_id')->sum('amount');
+
+
+
+        $otherPayments = PaymentVoucher::where( function($query) {
+            if(!empty($this->from_date) && !empty($this->to_date)  ){
+                $query->whereBetween('created_at', [$this->from_date,$this->to_date]);
+                }
+            if(!empty($this->doctor_id) ){
+                $query->where('doctor_id',$this->doctor_id);
+            }
+        })->whereNull('doctor_id')->whereNull('user_id')->sum('amount');
+
+
+
+        return view('livewire.financial-service-distribution-branch', compact('serviceBookings','branches','specialists','doctorsProfits','employeesProfits','companiesProfits','clinicsProfits','doctorsPayments','employeesPayments','otherPayments'));
+    }
+
+
+
+    public function updatedSpecialistId($specialist_id)
+    {
+     if (!is_null($specialist_id)) {
+            $this->doctors = Doctor::where('specialist_id', $this->specialist_id)->get();
+        }
+    }
+
+
+
+}
+

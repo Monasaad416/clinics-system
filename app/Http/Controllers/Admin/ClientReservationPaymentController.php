@@ -222,6 +222,6 @@ class ClientReservationPaymentController extends Controller
     {
         $payment = ClientReservationPayment::findOrFail($request->payment_id);
 
-        return view('admin.pages.clients_payments.print',compact('payment'));
+        return view('admin.pages.clients_reservations_payments.print',compact('payment'));
     }
 }

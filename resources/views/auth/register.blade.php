@@ -43,7 +43,7 @@
                 @endphp
                 <label class= 'block font-medium text-sm text-gray-700 mt-2'  style="text-align: right">الفرع</label>
                 <select name="branch_id" style="width: 100%" class = 'mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm' style="text-align: right">
-                    <option value="">--إختار الفرع--</option>
+                    <option value="">--إختر الفرع--</option>
                     @foreach ($branches as $branch)
                         <option value="{{ $branch->id }}">{{ $branch->name_ar }}</option>
                     @endforeach
@@ -52,7 +52,7 @@
 
                 <label class= 'block font-medium text-sm text-gray-700 mt-2'  style="text-align: right">القسم</label>
                 <select name="department_id" style="width: 100%" class = 'mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm'>
-                   <option value="">--إختار القسم--</option>
+                   <option value="">--إختر القسم--</option>
                     @foreach ($departments as $dep)
                         <option value="{{ $dep->id }}">{{ $dep->name_ar }}</option>
                     @endforeach
@@ -109,7 +109,7 @@
                     dataType:"json",
                     success: function (data) {
                         $('select[name="department_id"]').empty();
-                        $('select[name="department_id"]').append('<option value="selected disabled">إختار القسم </option>');
+                        $('select[name="department_id"]').append('<option value="selected disabled">إختر القسم </option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="department_id"]').append('<option value="' + key + '">' + value + '</option>');

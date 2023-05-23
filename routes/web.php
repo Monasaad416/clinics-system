@@ -34,8 +34,10 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\Admin\ClientServicePaymentController;
 use App\Http\Controllers\Admin\ClientReservationPaymentController;
 use App\Http\Controllers\Admin\ProfitDistributionReservationController;
+use App\Http\Controllers\Admin\ProfitDistributionServiceController;
+use App\Http\Controllers\Admin\ServiceBookingController;
 use App\Http\Controllers\Client\HomeController as ClientHomeController;
-
+use App\Models\ServiceBooking;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +56,8 @@ Route::get('/admin/getDepartmentsByBranch/{branch_id}', [RegisteredUserControlle
 Route::get('/admin/getServicesByBranch/{branch_id}', [ReservationController::class, 'getServicesByBranch'])->name("getServicesByBranch");
 Route::get('/admin/getNamesByJob/{modelName}/{branch_id}', [PaymentController::class, 'getNamesByJob'])->name("getNamesByJob");
 Route::get('/admin/getFeesByDoctor/{doctor_id}', [ClientPaymentController::class, 'getFeesByDoctor'])->name("getFeesByDoctor");
+Route::get('/admin/getEmployeesByBranch/{branch_id}', [ServiceBookingController::class, 'getEmployeesByBranch'])->name("getEmployeesByBranch");
+Route::get('/admin/getClientByPhone/{phone}', [ServiceBookingController::class, 'getClientByPhone'])->name("getClientByPhone");
 
 
 Route::get('/admin/getDoctorsBySubSpecialistAndBranch/{sub_specialist_id}/{branch_id}', [ReservationController::class, 'getDoctorsBySubSpecialistAndBranch']);
@@ -88,6 +92,7 @@ Route::group(
                 'services' => ServiceController::class,
                 'appointments' => DoctorAppointmentController::class,
                 'reservations' => ReservationController::class,
+                'services_bookings' => ServiceBookingController::class,
                 'offers' => OfferController::class,
                 'payments' => PaymentController::class,
                 'companies' => CompanyController::class,
@@ -121,20 +126,26 @@ Route::group(
             Route::post('/clients_reservations_payments/store',[ClientReservationPaymentController::class,'store'])->name('clients_reservations_payments.store');
             Route::get('/clients_reservations_payments/edit/{payment_id}',[ClientReservationPaymentController::class,'edit'])->name('clients_reservations_payments.edit');
             Route::post('/clients_reservations_payments/update',[ClientReservationPaymentController::class,'update'])->name('clients_reservations_payments.update');
+            Route::delete('/clients_reservations_payments/delete/{payment_id}',[ClientReservationPaymentController::class,'delete'])->name('clients_reservations_payments.destroy');
+            Route::get('/client_reservations_payment/print/{payment_id}',[ClientReservationPaymentController::class,'print'])->name('clients_reservations_payments.print');
 
-
-            Route::get('/clients_services_payments/create/{reservation_id}',[ClientServicePaymentController::class,'create'])->name('clients_services_payments.create');
-            Route::post('/clients_services_payments/store',[ClientServicePaymentController::class,'store'])->name('clients_services_payments.store');
+            // Route::get('/clients_services_payments/create/{reservation_id}',[ClientServicePaymentController::class,'create'])->name('clients_services_payments.create');
+            // Route::post('/clients_services_payments/store',[ClientServicePaymentController::class,'store'])->name('clients_services_payments.store');
             Route::get('/reservations_profit_distributions/create/{reservation_id}',[ProfitDistributionReservationController::class,'create'])->name('profits_distributions_res.create');
             Route::post('/reservations_profit_distributions/store',[ProfitDistributionReservationController::class,'store'])->name('profits_distributions_res.store');
 
-            Route::get('/clients_services_payments/edit/{payment_id}',[ClientServicePaymentController::class,'edit'])->name('clients_services_payments.edit');
-            Route::post('/clients_services_payments/update',[ClientServicePaymentController::class,'update'])->name('clients_services_payments.update');
+
+            Route::get('/services_profit_distributions/create/{service_booking_id}',[ProfitDistributionServiceController::class,'create'])->name('profits_distributions_serv.create');
+            Route::post('/services_profit_distributions/store',[ProfitDistributionServiceController::class,'store'])->name('profits_distributions_serv.store');
+            Route::get('/client_services_payment/print/{payment_id}',[ServiceBookingController::class,'print'])->name('clients_services_payments.print');
+
+            // Route::get('/clients_services_payments/edit/{payment_id}',[ClientServicePaymentController::class,'edit'])->name('clients_services_payments.edit');
+            // Route::post('/clients_services_payments/update',[ClientServicePaymentController::class,'update'])->name('clients_services_payments.update');
 
 
-            Route::delete('/clients_payments/delete/{payment_id}',[ClientPaymentController::class,'delete'])->name('clients_payments.destroy');
 
-            Route::get('/client_payment/print/{payment_id}',[ClientPaymentController::class,'print'])->name('clients_payments.print');
+
+
 
             Route::get('/settings/edit', [SettingController::class,'edit'])->name('settings.edit');
             Route::post('/settings/update', [SettingController::class,'update'])->name('settings.update');
@@ -143,7 +154,7 @@ Route::group(
             Route::get('/payment_type/{reservation_id}', [ReservationController::class,'SelectPaymentType'])->name('payment_type.select');
         });
 
-    Route::view('add_doctor','livewire.show_form');
+
 
 
     Route::post('/employee/restore/{id}',[EmployeeController::class,'restore'])->name('admin.employees.restore');
@@ -154,7 +165,7 @@ Route::group(
     Route::get('search-financial', [FinancialController::class,'income'])->name('search_front.financial_result');
     Route::get('search-payments', [PaymentController::class,'index'])->name('admin.search.payments');
 
-    Route::get('financial-payments/export/', [Payment::class, 'export'])->name('financial_payments.excel');
+    Route::get('financial-payments/export/', [Payment::class, 'export'])->name('payments_vouchers.excel');
 
     Route::get('/admin/financial/view',[FinancialController::class,'index'])->name('admin.finantial.reservations-income');
     Route::get('/admin/financial-1/view',[Financial1Controller::class,'index'])->name('admin.finantial-1.reservations-income');
@@ -176,29 +187,32 @@ Route::group(
     Route::get('/admin/all-notifications', [EmployeeController::class, 'getAllNotifications'])->name('admin.all.notifications');
 
 
-
-
-    Route::view('/admin/financial_results','livewire.show_financial')->name('financial_results');
-    Route::view('/admin/financial_results_branch','livewire.show_financial-branch')->name('financial_results_branch');
-
-
-    // Route::view('financial_results2','livewire.show_financial2')->name('financial_results2');
-    // Route::view('financial_results3','livewire.show_financial3')->name('financial_results3');
-
-    Route::view('/admin/financial_payments','livewire.show_payments')->name('financial_payments');
-    Route::view('/admin/financial_payments_branch','livewire.show_payments_branch')->name('financial_payments_branch');
-
-    Route::view('/admin/clients_reservations_payments','livewire.show_clients_reservations_payments')->name('livewire.clients_reservations_payments');
-    Route::view('/admin/clients_reservations_payments_branch','livewire.show_clients_reservations_payments_branch')->name('livewire.clients_reservations_payments_branch');
-
+Route::group(['middleware' => ['can:superadmin']], function () {
+    Route::view('/admin/financial_results','livewire.show_financial')->name('financial_results');//تقارير الكشوفات
+    Route::view('/admin/financial_distribution','livewire.show_financial_distribution')->name('financial_distribution');//توزيع ارباح الكشوفات
+    Route::view('/admin/financial_services_distribution','livewire.show_financial_services_distribution')->name('financial_services_distribution');//توزيع ارباح الخدمات
+    Route::view('/admin/financial_services_results','livewire.show_financial_services')->name('financial_services_results');//تقارير الخدمات    
+    Route::view('/admin/financial_general_report','livewire.show_general_report')->name('financial_general_report');//تقرير ارباح وخسائر مجمع
+    Route::view('/admin/payments_vouchers','livewire.show_payments')->name('payments_vouchers');//اذونات الصرف
+    Route::view('/admin/clients_reservations_payments','livewire.show_clients_reservations_payments')->name('livewire.clients_reservations_payments');//اذونات دفع العملاء
     Route::view('/admin/clients_services_payments','livewire.show_clients_services_payments')->name('livewire.clients_services_payments');
+});
+
+    Route::view('/admin/clients_reservations_payments_branch','livewire.show_clients_reservations_payments_branch')->name('livewire.clients_reservations_payments_branch');
+    Route::view('/admin/financial_results_branch','livewire.show_financial-branch')->name('financial_results_branch');//تقارير الكشوفات للفرع
+    Route::view('/admin/financial_distribution_branch','livewire.show_financial_distribution_branch')->name('financial_distribution_branch');//توزيع ارباح الكشوفات للفرع
+    Route::view('/admin/financial_services_distribution_branch','livewire.show_financial_services_distribution_branch')->name('financial_services_distribution_branch');//توزيع ارباح الخدمات للفرع
+
+    Route::view('/admin/financial_services_results_branch','livewire.show_financial_services_branch')->name('financial_services_results_branch');//تقارير الخدمات للفرع
+    Route::view('/admin/financial_general_report_branch','livewire.show_general_report_branch')->name('financial_general_report_branch');//تقرير ارباح وخسائر مجمع للفرع
+    Route::view('/admin/payments_vouchers_branch','livewire.show_payments_branch')->name('payments_vouchers_branch');
     Route::view('/admin/clients_services_payments_branch','livewire.show_clients_services_payments_branch')->name('livewire.clients_services_payments_branch');
 
 
-    // Route::view('financila_payments','livewire.show_payments2')->name('financial_payments2');
-    // Route::view('financila_payments','livewire.show_payments3')->name('financial_payments3');
 
 
+    // Route::view('financila_payments','livewire.show_payments2')->name('payments_vouchers2');
+    // Route::view('financila_payments','livewire.show_payments3')->name('payments_vouchers3');
 });
 
 

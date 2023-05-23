@@ -72,10 +72,10 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <strong>إختار المهام المسموح القيام بها :</strong>
+                                        <strong>إختر المهام المسموح القيام بها :</strong>
                                         <br/>
                                         <input type="checkbox" name="select-all" id="select-all" />
-                                        <h5 class="d-inline my-4">إختار الكل</h5> 
+                                        <h5 class="d-inline my-4">إختر الكل</h5> 
                                         <br>
                                         @foreach($permission as $value)
                                             <label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}

@@ -80,7 +80,7 @@ class ClientResPaymentComponent extends Component
     {
         if (!is_null($branch_id)) {
             $this->doctors = Doctor::where('branch_id', $this->branch_id)->get();
-            $this->employees = User::where('branch_id', $this->branch_id)->get();
+            $this->employees = User::where('branch_id', $this->branch_id)->whereNot('roles_name','["reception"]')->whereNot('roles_name','["superadmin"]')->get();
         }
 
     }

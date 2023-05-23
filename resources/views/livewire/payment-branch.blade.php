@@ -8,7 +8,7 @@
 						<div class="card">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">قائمة سندات الصرف لفرع {{ App\Models\Branch::where('id',auth()->user()->branch_id)->first()->name_ar }}</h4>
+									<h4 class="card-title mg-b-0 text-danger">قائمة أذونات الصرف لفرع {{ App\Models\Branch::where('id',auth()->user()->branch_id)->first()->name_ar }}</h4>
                                         <button class="btn btn-primary"><a class="x-small text-white" href="{{route("admin.payments.create")}}">إضافة سند صرف</a></button>
                                         <button class="btn btn-primary"><a class="x-small text-white" wire:click="exportBranch" >تصدير إلي إكسيل</a></button>
 								</div>
@@ -23,41 +23,41 @@
 
                                         <div class="col">
                                             <label for="">بحث بالتخصص الرئيسي </label>
-                                            <select wire:model="specialist_id" class="form-control" id="specialist_id" value="{{ old('specialist_id') }}" >
-                                                <option value="">-- إختار التخصص--</option>
+                                            <select wire:model="specialist_id" class="form-control" name="specialist_id" value="{{ old('specialist_id') }}" >
+                                                <option value="">-- إختر التخصص--</option>
                                                 @foreach($specialists as $specialist)
                                                     <option value ="{{$specialist->id}}">{{$specialist->name_ar}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
-                                        <div class="col">
-                                            <label for="">بحث بالطبيب   </label>
-                                            <select wire:model="doctor_id" class="form-control" id="doctor_id" value="{{ old("doctor_id") }}" >
-                                                <option value="">-- إختار الطبيب--</option>
-                                                    @foreach($doctors as $doctor)
-                                                    <option value ="{{$doctor->id}}">{{$doctor->name_ar}}</option>
-                                                @endforeach
 
-                                            </select>
-                                        </div>
 
-                                        @php
-                                            $employees = App\Models\User::where('branch_id',auth()->user()->branch_id)->get();
-                                        @endphp
 
-                                        <div class="col">
-                                            <label for="">بحث بالموظف </label>
-                                            <select wire:model="employee_id" class="form-control" id="employee_id" value="{{ old("employee_id") }}" >
-                                                <option value="">-- إختار الموظف--</option>
-                                
-                                                    @foreach($employees as $user)
-                                                    <option value ="{{$user->id}}">{{$user->name}}</option>
-                                                @endforeach
+                                            <div class="col">
+                                                <label for="">بحث بالطبيب   </label>
+                                                <select wire:model="doctor_id" class="form-control" name="doctor_id" value="{{ old("doctor_id") }}" >
+                                                    <option value="">-- إختر الطبيب--</option>
+                                                    @if (!is_null($branch_id) || !is_null($specialist_id))
+                                                        @foreach($doctors as $doctor)
+                                                            <option value ="{{$doctor->id}}">{{$doctor->name_ar}}</option>
+                                                        @endforeach
+                                                    @endif
 
-                                            </select>
-                                        </div>
-                                   
+                                                </select>
+                                            </div>
+
+
+                                            <div class="col">
+                                                <label for="">بحث بالموظف </label>
+                                                <select wire:model="employee_id" class="form-control" name="employee_id" value="{{ old("employee_id") }}" >
+                                                    <option value="">-- إختر الموظف--</option>
+                                                        @foreach(App\models\User::where('branch_id',auth()->user()->branch_id)->get() as $user)
+                                                        <option value ="{{$user->id}}">{{$user->name}}</option>
+                                                        @endforeach
+                                                     
+                                                </select>
+                                            </div>
 
                                         <div class="col">
                                             <label for="">بحث من تاريخ</label>
@@ -81,9 +81,6 @@
 												<th>المهنة </th>
 												<th>البند</th>
                                                 <th>المبلغ</th>
-												@can('dashboard')
-													<th>الفرع</th>
-												@endcan
                                                 <th>تحديث</th>
                                                 <th>حذف</th>
 												<th>طباعة</th>
@@ -97,24 +94,22 @@
 											{{-- {{ dd($payment) }} --}}
                                                 <tr>
                                                     <th scope="row">{{ $loop->iteration }}</th>
-													@if($payment->salariable_type == 'App\Models\Doctor')
+													@if($payment->doctor_id != null)
                                                     	<td>
-															{{App\Models\Doctor::where('id',$payment->salariable_id)->first()->name_ar }}
+															{{App\Models\Doctor::where('id',$payment->doctor_id)->first()->name_ar }}
 														</td>
 														<td>
 															<span class="text-success">طبيب</span>
 														</td>
-													@else
-														<td>{{App\Models\User::where('id',$payment->salariable_id)->first()->name}}</td>
+													@elseif($payment->user_id != null)
+														<td>{{App\Models\User::where('id',$payment->user_id)->first()->name}}</td>
 														<td><span class="text-info">موظف</span></td>
+                                                    @else
+                                                        <td>مصروفات أخري</td>
+                                                        <td>--- </td>
 													@endif
-                                                     <td>{{ $payment->details }}</td>
+                                                    <td>{{ $payment->details }}</td>
                                                     <td>{{ $payment->amount }}</td>
-                                                   
-													@can('dashboard')
-                                                        <th>{{ $payment->branch->name_ar }}</th>
-													@endcan
-
                                                     <td>
                                                         <a href="{{route('admin.payments.edit',$payment->id)}}" class="btn btn-info btn-sm" role="button" aria-pressed="true" title="تحديث الفرع"><i class="fa fa-edit text-white" aria-hidden="true"></i></a>
                                                     </td>
@@ -127,16 +122,18 @@
                                                                 <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند الصرف من قائمة السندات</h5>
+                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف سند الصرف من قائمة الأذونات</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
                                                                     </div>
                                                                     <div class="modal-body">
-																				@if($payment->salariable_type == 'App\Models\Doctor')
-																					 <p>هل انت متأكد من حذف سند الصرف الخاص ب  {{App\Models\Doctor::where('id',$payment->salariable_id)->first()->name_ar }} </p>
-																				@else
-																					 <p>هل انت متأكد من حذف سند الصرف الخاص ب  {{App\Models\User::where('id',$payment->salariable_id)->first()->name }} </p>
+																				@if($payment->doctor_id != null)
+																					 <p>هل انت متأكد من حذف سند الصرف الخاص ب  {{App\Models\Doctor::where('id',$payment->doctor_id)->first()->name_ar }} </p>
+																				@elseif($payment->user_id != null)
+																					 <p>هل انت متأكد من حذف سند الصرف الخاص ب  {{App\Models\User::where('id',$payment->user_id)->first()->name }} </p>
+                                                                                @else
+                                                                                    <p>هل انت متأكد من حذف سند الصرف الخاص ب  {{$payment->details}} </p>
 																				@endif
 
 

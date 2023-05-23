@@ -7,7 +7,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">تحديث سند الصرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ سندات الصرف</span>
+                <h4 class="content-title mb-0 my-auto">تحديث سند الصرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ أذونات الصرف</span>
             </div>
         </div>
         {{-- <div class="d-flex my-xl-auto right-content">
@@ -56,70 +56,72 @@
                             @csrf
                             @method('PUT')
                             <div class="card-body">
-                                <div class="form-group">
+                                 <div class="form-group my-3">
                                     <select name="type_id" class="form-control">
-                                        <option value="0">-- إختار المهنة--</option>
-                                        <option value ="doctor" {{ $payment->salariable_type == 'App\Models\Doctor'  ? 'selected' : ''}}>طبيب</option>
-                                        <option value ="user"  {{ $payment->salariable_type == 'App\Models\User'  ? 'selected' : ''}}>موظف</option>
+                                        <option value="0">-- إختر --</option>
+                                        <option value ="doctor" {{$payment->doctor_id ? 'selected': ''}}>إذن صرف لطبيب </option>
+                                        <option value ="user" {{$payment->user_id ? 'selected': ''}}>إذن صرف لموظف</option>
+                                        <option value ="clinic" {{$payment->doctor_id == null &&  $payment->user_id == null ? 'selected': ''}}>مصروفات أخري  </option>
                                     </select>
                                  </div>
-                            
-                             @if(Auth::user()->roles_name == ["superadmin"])
-                                <div class="form-group">
-                                    {!! Form::select('branch_id', $branches, null ,
-                                        ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار الفرع',
-                                        ])
-                                    !!}
-                                </div>
-                            @else
-                                <div class="form-group">
-                                    <select name='branch_id' class="form-control">
-                                        <option value="{{(Auth::user()->branch->id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
-                                    </select>
-                                </div>
-                            @endif
-                                <div class="form-group">
-                                    <option value="0">-- إختار الأسم--</option>
-                                    <select name="employee_id" class="form-control">
-                                        @if($payment->salariable_type == 'App\Models\Doctor')
-                                            @foreach (App\Models\Doctor::all() as $doctor)
-                                                <option value ="{{ $doctor->id}}">{{ $doctor->name_ar }}</option>
+
+                                @if(Auth::user()->roles_name == ["superadmin"])
+                                    <div class="form-group my-3 my-3">
+                                        <select name='branch_id' class='form-control mt-1 mb-3' placeholder='إختر الفرع'>
+                                            @foreach (App\Models\Branch::all() as $branch)
+                                                <option value="{{$branch->id}}" {{Auth::user()->branch->id == $branch->id ? 'selected' : ''}}>{{$branch->name_ar}}</option>
                                             @endforeach
-                                        @else
-                                            @foreach (App\Models\User::all() as $user)
-                                                <option value ="{{ $user->id}}">{{ $user->name }}</option>
+
+                                        </select>
+                            
+                                    </div>
+                                @else
+                                    <div class="form-group my-3">
+                                        <select name='branch_id' class="form-control">
+                                            <option value="{{(Auth::user()->branch_id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
+                                        </select>
+                                    </div>
+                                @endif
+
+                                <input type="hidden" name="payment_id" value="{{$payment->id}}" />
+
+                                <div class="form-group my-3" id="employee_id">
+                                    <option value="0">-- إختر الأسم--</option>
+                                    <select name="employee_id"  class="form-control">
+                                        @if($payment->doctor_id != null)
+                                            @foreach (App\Models\Doctor::where('branch_id',$payment->branch_id)->get() as $doctor )
+                                                <option value="{{$doctor->id}}">{{$doctor->name_ar}}</option>
+                                            @endforeach
+                                        @elseif($payment->user_id != null)
+                                            @foreach(App\Models\User::where('branch_id',$payment->branch_id)->get() as $user )
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
                                             @endforeach
                                         @endif
 
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                   <label>المبلغ</label>
-                                   <input type="number" step="any" name="amount" min="0" class="form-control" value="{{ old('amount', $payment->amount)}}">  
-                                    @error('amount')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                         
+                            
+                            
+                                <div class="form-group my-3">
+                                    <label>المبلغ</label>
+                                   <input type="number" name="amount" min="0" value={{ $payment->amount }} step="any" class="form-control">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group my-3">
                                     <label>تفاصيل البند</label>
-                                   <input type="text" name="details" class="form-control"  value="{{ old('details', $payment->details)}}">  
-                                    @error('amount')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                   <input type="text" name="details" class="form-control"  value={{ $payment->details }} >
                                 </div>
 
                                 </div>
-                                <input type="hidden" name="id" value= {{ $payment->id }}>
 
                                   <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                                   <button type="submit" class="btn btn-secondary">تحديث</button> 
+                                   <button type="submit" class="btn btn-secondary">تحديث</button>
                                 </div>
 
                             </div>
                         </form>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -130,6 +132,7 @@
     <script>
         $(document).ready(function () {
             $('select[name="type_id"]').on('change', function () {
+            
                 var modelName;
                 if( $(this).val() == 'doctor') {
                      modelName = 'Doctor'
@@ -138,6 +141,7 @@
                 };
                 $('select[name="branch_id"]').on('change', function () {
                     var branchId = $(this).val();
+                    
                     console.log(branchId);
                        if (modelName) {
                     $.ajax({
@@ -147,7 +151,7 @@
                         success: function (data) {
                             console.log(data);
                             $('select[name="employee_id"]').empty();
-                             $('select[name="employee_id"]').append('<option value="" selected disabled >إختار الإسم</option>');
+                             $('select[name="employee_id"]').append('<option value="" selected disabled >إختر الإسم</option>');
                             $.each(data, function (key, value) {
                                 $('select[name="employee_id"]').append('<option value="' + key + '">' + value + '</option>');
                             });
@@ -157,13 +161,15 @@
                     console.log('AJAX load did not work');
                 }
                 });
-                                
+
                 console.log(modelName);
-             
+
             });
         });
     </script>
 @endpush
 
 @endsection
+
+
 

@@ -53,7 +53,7 @@
 
                         @include('inc.errors')
                         @php
-                            
+
                             if(Auth::user()->roles_name == ["superadmin"]){
                                 $departments = [];
                             } else {
@@ -112,14 +112,14 @@
 
                             @if(Auth::user()->roles_name == ["superadmin"])
                                 <div class="form-group">
-                                    {!! Form::select('branch_id', $branches, null ,
+                                    {!! Form::select('branch_id', $branches, old('branch_id') ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار الفرع',
+                                        'placeholder' => 'إختر الفرع',
                                         ])
                                     !!}
                                 </div>
                                 @else
-                              
+
                                 <div class="form-group">
                                     <select name='branch_id' class="form-control">
                                         <option value="{{(Auth::user()->branch_id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
@@ -129,28 +129,32 @@
 
 
 
+
+
                                 <div class="form-group">
                                     {!!Form::label('name', 'القسم')!!}
-                                    {!! Form::select('department_id', $departments, null ,
+                                    {!! Form::select('department_id', $departments, old('department_id', $model->department_id) ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار القسم',
+                                        'placeholder' => 'إختر القسم',
                                         ])
                                     !!}
                                 </div>
+
+        
 
 
                                 <div class="form-group">
                                     {!!Form::label('name', 'المهام')!!}
                                     {!! Form::select('roles_name[]', $roles_name,[], array('class' => 'form-control','multiple')) !!}
                                     {{-- <select name='roles_name' class ='form-control  mt-1 mb-3' >
-                                        <option value="">--إختار --</option>
+                                        <option value="">--إختر --</option>
                                         @foreach ($roles as $role )
                                             <option value="{{ $role->name }}">{{ $role->name }} </option>
                                         @endforeach
                                     </select> --}}
 
                                 </div>
-
+{{-- 
                                 <div class="form-group">
                                     {!!Form::label('name', 'الراتب :')!!}
                                     {!!Form::number('salary', null,[
@@ -159,7 +163,7 @@
                                         'min' => 0,
                                         'step'=>'any',
                                     ])!!}
-                                </div>
+                                </div> --}}
 
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
@@ -195,7 +199,7 @@
                     dataType:"json",
                     success: function (data) {
                         $('select[name="department_id"]').empty();
-                        $('select[name="department_id"]').append('<option value="selected disabled">إختار القسم </option>');
+                        $('select[name="department_id"]').append('<option value="selected disabled">إختر القسم </option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="department_id"]').append('<option value="' + key + '">' + value + '</option>');
@@ -207,6 +211,36 @@
                 console.log('AJAX load did not work');
             }
         });
+
+
+
+          
+            var branch_id =  $('select[name="branch_id"]').val();
+ 
+            if (branch_id) {
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{ URL::to("/admin/getDepartmentsByBranch") }}/" + branch_id,
+                    type: "GET",
+                    dataType:"json",
+                    success: function (data) {
+                        $('select[name="department_id"]').empty();
+                        $('select[name="department_id"]').append('<option value="selected disabled">إختر القسم </option>');
+                        $.each(data, function (key, value) {
+
+                            $('select[name="department_id"]').append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    },
+
+                });
+            } else {
+                console.log('AJAX load did not work');
+            }
+        
     });
     </script>
 @endsection

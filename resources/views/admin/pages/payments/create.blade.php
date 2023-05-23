@@ -7,7 +7,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">إضافة سند صرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ سندات الصرف</span>
+                <h4 class="content-title mb-0 my-auto">إضافة سند صرف</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ أذونات الصرف</span>
             </div>
         </div>
 
@@ -21,52 +21,62 @@
                 <div class="card-body">
 
 
-                    <div class="col-xs-12">
+
                         <div class="col-md-12">
-                        <br>
+
+                            {{-- <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-3"></div>
+                            </div> --}}
+
+
 
 
                         @include('inc.errors')
                         <form method="POST" action="{{ route('admin.payments.store') }}">
                             @csrf
                             <div class="card-body">
-                                 <div class="form-group">
+                                 <div class="form-group my-3">
                                     <select name="type_id" class="form-control">
-                                        <option value="0">-- إختار المهنة--</option>
-                                        <option value ="doctor">طبيب</option>
-                                        <option value ="user">موظف</option>
+                                        <option value="0">-- إختر --</option>
+                                        <option value ="doctor">إذن صرف لطبيب </option>
+                                        <option value ="user">إذن صرف لموظف</option>
+                                        <option value ="clinic">مصروفات أخري  </option>
                                     </select>
                                  </div>
 
                              @if(Auth::user()->roles_name == ["superadmin"])
-                                <div class="form-group">
+                                <div class="form-group my-3 my-3">
                                     {!! Form::select('branch_id', $branches, null ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار الفرع',
+                                        'placeholder' => 'إختر الفرع',
                                         ])
                                     !!}
                                 </div>
                             @else
-                                <div class="form-group">
+                                <div class="form-group my-3">
                                     <select name='branch_id' class="form-control">
+                                        <option value ="0" selected>إختر الفرع</option>
                                         <option value="{{(Auth::user()->branch->id)}}" >{{(Auth::user()->branch->name_ar)}}</option>
                                     </select>
                                 </div>
                             @endif
-                                <div class="form-group">
-                                    <option value="0">-- إختار الأسم--</option>
-                                    <select name="employee_id" class="form-control">
-                                        @foreach (Auth::user()->branch->employees as $emp)
-                                            <option value="{{ $emp->id }}">{{ $emp->name }}</option>
-                                        @endforeach
+
+
+                                <div class="form-group my-3" id="employee_id">
+                                    <option value="0">-- إختر الأسم--</option>
+                                    <select name="employee_id"  class="form-control">
+
+
 
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group my-3">
                                     <label>المبلغ</label>
                                    <input type="number" name="amount" min="0" step="any" class="form-control">
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group my-3">
                                     <label>تفاصيل البند</label>
                                    <input type="text" name="details" class="form-control">
                                 </div>
@@ -80,7 +90,7 @@
                             </div>
                         </form>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -91,6 +101,10 @@
     <script>
         $(document).ready(function () {
             $('select[name="type_id"]').on('change', function () {
+                 $('select[name="employee_id"]').empty();
+                if($(this).val() == 'clinic') {
+                    $('#employee_id').hide();
+                }
                 var modelName;
                 if( $(this).val() == 'doctor') {
                      modelName = 'Doctor'
@@ -99,6 +113,7 @@
                 };
                 $('select[name="branch_id"]').on('change', function () {
                     var branchId = $(this).val();
+                    
                     console.log(branchId);
                        if (modelName) {
                     $.ajax({
@@ -108,7 +123,7 @@
                         success: function (data) {
                             console.log(data);
                             $('select[name="employee_id"]').empty();
-                             $('select[name="employee_id"]').append('<option value="" selected disabled >إختار الإسم</option>');
+                             $('select[name="employee_id"]').append('<option value="" selected disabled >إختر الإسم</option>');
                             $.each(data, function (key, value) {
                                 $('select[name="employee_id"]').append('<option value="' + key + '">' + value + '</option>');
                             });

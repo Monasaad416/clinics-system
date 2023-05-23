@@ -31,11 +31,11 @@ class CreateReservationsTable extends Migration {
 			$table->string('insurance')->nullable();
             $table->decimal('insurance_discount')->nullable()->default(0);
             $table->decimal('insurance_percentage')->nullable()->default(0);
-			$table->unsignedBigInteger('company_id');
+			$table->unsignedBigInteger('company_id')->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('reservation_price')->nullable()->default(0);
-            $table->decimal('services_price')->nullable()->default(0);
-            $table->decimal('final_price')->nullable()->default(0);
+            //$table->decimal('services_price')->nullable()->default(0);
+            //$table->decimal('final_price')->nullable()->default(0);
 			$table->string('appointment_notes')->nullable();
 			$table->timestamps();
             });

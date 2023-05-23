@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount');
             $table->text('notes')->nullable();
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('doctor_id');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('reservation_id');
+            $table->unsignedBigInteger('reservation_id')->nullable();
             $table->foreign('reservation_id')->references('id')->on('reservations')->onDelete('cascade')->onUpdate('cascade');
+             $table->unsignedBigInteger('service_booking_id')->nullable();
+            $table->foreign('service_booking_id')->references('id')->on('service_bookings')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

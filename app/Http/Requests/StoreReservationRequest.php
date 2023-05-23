@@ -48,7 +48,7 @@ class StoreReservationRequest extends FormRequest
             'type.required' => trans('validation.required'),
             'payment_method_id.required' => trans('validation.required'),
             'insurance.string' => trans('validation.string'),
-            'insurance_percentage.required' => trans('validation.numeric'),
+            'insurance_percentage.numeric' => trans('validation.numeric'),
         ];
     }
 }

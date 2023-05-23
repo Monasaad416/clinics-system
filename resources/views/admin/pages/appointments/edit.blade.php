@@ -127,7 +127,7 @@
                                     {!!Form::label('department', 'القسم')!!}
                                     {!! Form::select('department_id', $departments, null ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار القسم',
+                                        'placeholder' => 'إختر القسم',
                                         ])
                                     !!}
                                 </div>
@@ -135,7 +135,7 @@
                                 <div class="form-group">
                                     {!! Form::select('section_id', $sections, null ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار الفرع',
+                                        'placeholder' => 'إختر الفرع',
                                         ])
                                     !!}
                                 </div>
@@ -143,7 +143,7 @@
                                 <div class="form-group">
                                     {!! Form::select('doctor_title_id', $doctorTitles, null ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => ' إختار المسمي الوظيفي ',
+                                        'placeholder' => ' إختر المسمي الوظيفي ',
                                         ])
                                     !!}
                                 </div>
@@ -151,7 +151,7 @@
                                 <div class="form-group">
                                     {!! Form::select('professional_title_id', $professionalTitles, null ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => ' إختار اللقب المهني ',
+                                        'placeholder' => ' إختر اللقب المهني ',
                                         ])
                                     !!}
                                 </div>

@@ -42,7 +42,7 @@
                     success: function (data) {
                         $('select[name="doctor_id"]').empty();
                            if(locale == 'ar') {
-                                 $('select[name="doctor_id"]').append('<option value="0" selected disabled>إختار الطبيب </option>');
+                                 $('select[name="doctor_id"]').append('<option value="0" selected disabled>إختر الطبيب </option>');
                            } else{
                                $('select[name="doctor_id"]').append('<option value="0" selected disabled>Select Doctor  </option>');
                            }
@@ -79,7 +79,7 @@
                     success: function (data) {
                         $('select[name="sub_specialist_id"]').empty();
                              if(locale == 'ar') {
-                                 $('select[name="sub_specialist_id"]').append('<option value="0" >إختار التخصص الفرعي </option>');
+                                 $('select[name="sub_specialist_id"]').append('<option value="0" >إختر التخصص الفرعي </option>');
                            } else{
                                $('select[name="sub_specialist_id"]').append('<option value="0">Select Sub Speciality  </option>');
                            }
@@ -119,7 +119,7 @@
                     success: function (data) {
                         $('select[name="doctor_id"]').empty();
                            if(locale == 'ar') {
-                                 $('select[name="doctor_id"]').append('<option value="0" selected disabled>إختار الطبيب </option>');
+                                 $('select[name="doctor_id"]').append('<option value="0" selected disabled>إختر الطبيب </option>');
                            } else{
                                $('select[name="doctor_id"]').append('<option value="0" selected disabled>Select Doctor  </option>');
                            }
@@ -164,7 +164,7 @@
 
                         $('select[name="day_id"]').empty();
                         if(locale == 'ar') {
-                                 $('select[name="day_id"]').append('<option value="0" selected disabled>إختار الموعد </option>');
+                                 $('select[name="day_id"]').append('<option value="0" selected disabled>إختر الموعد </option>');
                           $.each(data, function (key, value) {
 
                            $('select[name="day_id"]').append('<option value="' + value['day_en'] +" "+"from"+" " +value['from'] + " " + "to" +" " + value['to']+ '">'

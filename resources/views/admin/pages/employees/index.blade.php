@@ -63,7 +63,7 @@
 												<th>#</th>
 												<th>الإسم</th>
 												<th>الوظيفة</th>
-												<th>الراتب</th>
+												{{-- <th>الراتب</th> --}}
                                                 <th>الصورة الشخصية</th>
                                                  {{-- <th>تاريخ الإلتحاق </th> --}}
 												 @can('dashboard')
@@ -87,11 +87,11 @@
                                                     <th scope="row">{{ $loop->iteration }}</th>
                                                     <td>{{ $emp->name }}</td>
                                                     <td>{{ $emp->department->name_ar}}</td>
-													@if( $emp->salary)
+													{{-- @if( $emp->salary)
                                                     <td>{{ $emp->salary}}</td>
 													@else
 													<td>0</td>
-													@endif
+													@endif --}}
 
                                                     <td>
                                                         @if($emp->image  )

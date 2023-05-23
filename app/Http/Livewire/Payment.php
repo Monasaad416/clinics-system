@@ -11,7 +11,8 @@ use Livewire\Component;
 use App\Models\Specialist;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
-use App\Exports\SalaryExport;
+use App\Exports\PaymentVoucherExport;
+use App\Models\PaymentVoucher;
 use Illuminate\Support\Facades\Storage;
 
 class Payment extends Component
@@ -45,7 +46,7 @@ class Payment extends Component
     public function render()
     {
 
-            $payments = Salary::where( function($query) {
+            $payments = PaymentVoucher::where( function($query) {
 
                 $branchesIds = Branch::pluck('id')->toArray();
                 $specialistsIds = Specialist::pluck('id')->toArray();
@@ -56,11 +57,11 @@ class Payment extends Component
 
                     }
                 if(!empty($this->doctor_id) ){
-                    $query->where('salariable_type','App\Models\Doctor')->where('salariable_id',$this->doctor_id);
+                    $query->where('doctor_id',$this->doctor_id);
                 }
 
                 if(!empty($this->employee_id) ){
-                    $query->where('salariable_type','App\Models\User')->where('salariable_id',$this->employee_id);
+                    $query->where('user_id',$this->employee_id);
                 }
                 if(!empty($this->branch_id) ){
                     $query->where('branch_id',$this->branch_id);
@@ -68,7 +69,7 @@ class Payment extends Component
                 }
                 if(!empty($this->specialist_id)){
                     $doctorsWithSpecialist = Doctor::where('specialist_id' , $this->specialist_id)->pluck('id');
-                    $query->where('salariable_type','App\Models\Doctor')->whereIn('salariable_id',$doctorsWithSpecialist);
+                    $query->whereIn('doctor_id',$doctorsWithSpecialist);
 
                 }
 
@@ -118,7 +119,7 @@ class Payment extends Component
         $branch_id = $this->branch_id;
         $specialist_id = $this->specialist_id;
 
-        return Excel::download(new SalaryExport( $from_date,$to_date,$branch_id,$employee_id,$specialist_id,$doctor_id), 'payments.xlsx');
+        return Excel::download(new PaymentVoucherExport( $from_date,$to_date,$branch_id,$employee_id,$specialist_id,$doctor_id), 'payments.xlsx');
     }
 
 

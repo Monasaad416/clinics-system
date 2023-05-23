@@ -23,7 +23,6 @@ class EmployeeController extends Controller
     }
     public function index(Request $request,Branch $branch)
     {
-
         if(Auth::user()->roles_name == ["superadmin"]){
             $employees = User::withTrashed()->latest()->paginate(20);
             return view('admin.pages.employees.index',compact('employees'));
@@ -40,7 +39,6 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-
         $roles = Role::pluck('name','name')->all();
         return view('admin.pages.employees.create',compact('roles'));
     }
@@ -70,9 +68,9 @@ class EmployeeController extends Controller
                         'department_id' => $request->department_id,
                         'branch_id' => $request->branch_id,
                         'roles_name' => $request->roles_name,
-                        'salary' => $request->amount ? $request->amount : 0,
+                        // 'salary' => $request->amount ? $request->amount : 0,
                 ]);
-                
+
                 $user->assignRole($request->input('roles_name'));
             } else {
                $user= User::create([
@@ -83,12 +81,12 @@ class EmployeeController extends Controller
                         'department_id' => $request->department_id,
                         'branch_id' => $request->branch_id,
                         'roles_name' => $request->roles_name,
-                        'salary' => $request->amount ? $request->amount : 0,
+                        // 'salary' => $request->amount ? $request->amount : 0,
                 ]);
                 $user->assignRole($request->input('roles_name'));
             }
 
-            $user = User::latest()->first();
+            // $user = User::latest()->first();
             // $user->salary()->create([
             //     'salariable_type' => 'App\Models\User',
             //     'amount' => $request->salary ? $request->salary : 0 ,
@@ -96,7 +94,7 @@ class EmployeeController extends Controller
             //     'details' => 'الراتب'
             // ]);
 
-            DB::commit(); 
+            DB::commit();
             return redirect()->route('admin.employees.index')->with('success' ,'تم إضافة موظف جديد بنجاح.');
         } catch (Exception $e) {
             DB::rollback();
@@ -156,7 +154,7 @@ class EmployeeController extends Controller
                 if($employee->image){
                     unlink(public_path('uploads/employees/'. $employee->image));
                 }
-                
+
 
                 $fileExtension = $request->image->getClientOriginalExtension();
                 $fileName = time().'.'.$fileExtension;
@@ -204,7 +202,7 @@ class EmployeeController extends Controller
 
         // Salary::where('salariable_type','App\Models\User')->where('salariable_id', $employee->id)->first()->delete();
 
-    
+
 
         $employee->delete();
         return redirect()->route('admin.employees.index')->with('delete' ,'تم حذف بيانات الموظف مؤقتا بنجاح.');
@@ -229,7 +227,7 @@ class EmployeeController extends Controller
 
 
 
-       
+
 
 
         $deletedEmployee->forceDelete();

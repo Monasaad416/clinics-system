@@ -119,7 +119,7 @@
                                     <div class="form-group">
                                         {!! Form::select('branch_id', $branches, null ,
                                             ['class' => 'form-control  mt-1 mb-3',
-                                            'placeholder' => 'إختار الفرع',
+                                            'placeholder' => 'إختر الفرع',
                                             ])
                                         !!}
                                     </div>
@@ -136,7 +136,7 @@
                                     {!!Form::label('name', 'القسم')!!}
                                     {!! Form::select('department_id', $departments, null ,
                                         ['class' => 'form-control  mt-1 mb-3',
-                                        'placeholder' => 'إختار القسم',
+                                        'placeholder' => 'إختر القسم',
                                         ])
                                     !!}
                                 </div>
@@ -147,7 +147,7 @@
                                     {!!Form::label('name', 'المهام')!!}
                                     {!! Form::select('roles_name[]', $roles_name,$emp->roles_name, array('class' => 'form-control','multiple')) !!}
                                     {{-- <select name='roles_name' class ='form-control  mt-1 mb-3' >
-                                        <option value="">--إختار --</option>
+                                        <option value="">--إختر --</option>
                                         @foreach ($roles as $role )
                                             <option value="{{ $role->name }}">{{ $role->name }} </option>
                                         @endforeach
@@ -155,7 +155,7 @@
 
                                 </div>
 
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     {!!Form::label('name', 'الراتب :')!!}
                                     {!!Form::number('salary', $emp->salary,[
                                         'class' => 'form-control  mt-1 mb-3',
@@ -163,7 +163,7 @@
                                         'min' => 0,
                                         'step'=>'any',
                                     ])!!}
-                                </div>
+                                </div> --}}
 
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
@@ -199,7 +199,7 @@
                     dataType:"json",
                     success: function (data) {
                         $('select[name="department_id"]').empty();
-                        $('select[name="department_id"]').append('<option value="selected disabled">إختار التخصص الفرعي</option>');
+                        $('select[name="department_id"]').append('<option value="selected disabled">إختر التخصص الفرعي</option>');
                         $.each(data, function (key, value) {
 
                             $('select[name="department_id"]').append('<option value="' + key + '">' + value + '</option>');

@@ -64,33 +64,29 @@
                                 <thead>
                                     <tr>
                                     <th class="wd-40p">مبلغ الفاتوره</th>
-                                        <th class="wd-40p">{{ number_format($payment->amount) }}</th>
+                                        <th class="wd-40p">{{ number_format($payment->amount,2) }}</th>
                                     </tr>
 
                                     <tr>
                                         <th class="wd-20p">نسبة تحمل التأمين </th>
                                         @if($payment->reservation->insurance_percentage > 0)
-                                            <th class="wd-40p">{{ number_format($payment->reservation->insurance_percentage) }}%</th>
+                                            <th class="wd-40p">{{ number_format($payment->reservation->insurance_percentage,2) }}%</th>
                                             @else
                                             <th class="wd-40p">{{ number_format(0) }}%</th>
                                         @endif
                                     </tr> 
                                     @php 
                                     $insuranceAmount = $payment->amount * $payment->reservation->insurance_percentage /100; 
-                                    $total = $payment->amount - $insuranceAmount;
+                                    $total = $payment->amount - $insuranceAmount -$payment->discount;
                                     @endphp 
-
-                                    <th class="wd-40p">المبلغ المتبقي للعيادة</th>
-                                        <th class="wd-40p">{{ number_format($payment->remaining_amount) }}</th>
-                                    </tr>
 
                                     
                                     <th class="wd-40p">مبلغ الخصم  </th>
-                                        <th class="wd-40p">{{ number_format($payment->discount) }}</th>
+                                        <th class="wd-40p">{{ number_format($payment->discount,2) }}</th>
                                     </tr>
 
-                                    <th class="wd-20p "  style="background: rgb(218, 215, 215)">الإجمالي شامل الضريبة </th>
-                                        <th class="wd-40p" style="background: rgb(218, 215, 215)">{{ number_format($payment->amount * 1.14) }}</th>
+                                    <th class="wd-20p "  style="background: rgb(218, 215, 215)">الإجمالي   </th>
+                                        <th class="wd-40p" style="background: rgb(218, 215, 215)">{{ number_format($total,2) }}</th>
                                     </tr>
                      
                                 </thead>
