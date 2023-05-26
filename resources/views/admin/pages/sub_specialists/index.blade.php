@@ -90,41 +90,39 @@
                                                     </td>
 													@endcan
 
-                                                   @can('sub-pecialists-delete')
-                                                    <td>
-                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_supSpecialist{{ $supSpecialist->id }}" title="حذف التخصص"><i class="fa fa-trash"></i></button></td>
-                                                                       <!-- Delete Modal -->
-                                                        <form action="{{route('admin.sub_specialists.destroy',$supSpecialist)}}" method="POST">
-                                                            <div class="modal fade" id="delete_supSpecialist{{$supSpecialist->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">حذف تخصص فرعي من قائمة التخصصات</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <p>هل انت متأكد من حذف التخصص الفرعي {{$supSpecialist->name_ar}}</p>
+                                                    @can('sub-pecialists-delete')
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_supSpecialist{{ $supSpecialist->id }}" title="حذف التخصص"><i class="fa fa-trash"></i></button></td>
+                                                            <!-- Delete Modal -->
+                                                            <form action="{{route('admin.sub_specialists.destroy',$supSpecialist)}}" method="POST">
+                                                                <div class="modal fade" id="delete_supSpecialist{{$supSpecialist->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">حذف تخصص فرعي من قائمة التخصصات</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <p>هل انت متأكد من حذف التخصص الفرعي {{$supSpecialist->name_ar}}</p>
 
-                                                                            @csrf
-                                                                            {{method_field('delete')}}
-                                                                            <input type="hidden" value="{{$supSpecialist->id}}" name="id">
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
-                                                                                <button type="submit" name="submit" class="btn btn-danger">حذف</button>
-                                                                            </div>
+                                                                                @csrf
+                                                                                {{method_field('delete')}}
+                                                                                <input type="hidden" value="{{$supSpecialist->id}}" name="id">
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">إغلاق</button>
+                                                                                    <button type="submit" name="submit" class="btn btn-danger">حذف</button>
+                                                                                </div>
+                                                                        </div>
+                                                                    </div>
                                                                     </div>
                                                                 </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </td>
+                                                            </form>
+                                                        </td>
 													@endcan
                                                 </tr>
                                             @endforeach
-
-
 										</tbody>
 									</table>
 								</div>
@@ -135,7 +133,7 @@
 				</div>
 				<!-- /row -->
 
-				
+
 				     <div class="d-flex justify-content-center align-items-center my-5">
                     {{ $supSpecialists-> links() }}
                 </div>
